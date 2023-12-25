@@ -5,7 +5,7 @@ void main()
     
 }
 
-
+/* Board Info */
 // Pos represents a position on the chessBoard, while MoveDir represents the the direction of a chessPieceMove
 typedef struct Vector2
 {
@@ -86,7 +86,7 @@ typedef struct GameInfo
     char currentPosAsFENString[128]; // The current boardPosition as FEN
     enum PieceColor currentTurn; // Color that currently is on turn
     GameCastlingRights gameCastlingRights; // The current castling rights for the ongoing game
-    Move possibleEnPassantDestination; // The field that a pawn had to move to, to perform an en passant in the current state of game
+    Pos possibleEnPassantDestination; // The field that a pawn had to move to, to perform an en passant move in the current state of game
     short playedHalfMoves; // Amount of moves since last capture or pawn moves (Used for draw rules)
     short nextMoveNumber; // The number of the next move to be performed
 } GameInfo;
