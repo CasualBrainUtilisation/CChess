@@ -1,9 +1,11 @@
 #include <string.h> //for NULL
 
 #include "CCGeneralGameInfo.h"
+#include "CCPieces.h"
 
 /* Contains a bunch of code to work with FENs */
 
+//Read the data from any FEN and store it as GameInfo struct
 GameInfo readFENData(char FEN[])
 {   
     // For first, create an empty GameInfo-struct, this will be filled later
@@ -25,12 +27,13 @@ GameInfo readFENData(char FEN[])
     
 
     strcopy(gameInfo.currentPosAsFENString, fenParts[0]);
-    strcopy(gameInfo.currentTurn, fenParts[1]);
-    GameCastlingRights gameCastlingRights = {CastlingRights.BothSides, CastlingRights.BothSides};
+    gameInfo.currentTurn = White;
+    GameCastlingRights gameCastlingRights = {BothSides, BothSides};
     gameInfo.gameCastlingRights = gameCastlingRights;
     gameInfo.nextMoveNumber = 3;
     gameInfo.playedHalfMoves = 50;
-    gameInfo.possibleEnPassantDestinationPos = {120, 120};
+    Pos enPassantPos = {120, 120};
+    gameInfo.possibleEnPassantDestinationPos = enPassantPos;
 
     return gameInfo;
 }

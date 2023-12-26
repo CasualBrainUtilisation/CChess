@@ -1,11 +1,15 @@
 #include <stdio.h>
 #include "hf/CCBoard.h"
 #include "hf/FEN.h"
+#include "hf/CCGeneralGameInfo.h"
 
 
-void main()
+int main()
 {
-    readFENData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    GameInfo gameInfo = readFENData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    printf(gameInfo.currentPosAsFENString);
+
+    return 0;
 }
 
 

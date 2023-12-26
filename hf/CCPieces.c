@@ -3,7 +3,7 @@
 /* everything to work with chessPieces */
 
 // The chessPieceTypes easily defined in an enum
-enum PieceType
+typedef enum PieceType
 {
     Pawn,
     Knight,
@@ -11,19 +11,19 @@ enum PieceType
     Rook,
     Queen,
     King,
-};
+} PieceType;
 
 // The color of a chessPiece
-enum PieceColor
+typedef enum PieceColor
 {
     White,
     Black
-};
+} PieceColor;
 
 // A single ChessPiece
 typedef struct Piece
 {
     Pos pos; // The position of the piece on the chessBoard
-    enum PieceType pieceType; // The type of the piece
-    enum PieceColor pieceColor; // The color of the piece
+    PieceType pieceType; // The type of the piece
+    PieceColor pieceColor; // The color of the piece
 } Piece;

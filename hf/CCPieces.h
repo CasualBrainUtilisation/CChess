@@ -1,22 +1,33 @@
 #ifndef CCPieces
 #define CCPieces
 
-
 /* everything to work with chessPieces */
 
 // The chessPieceTypes easily defined in an enum
-enum PieceType
+typedef enum PieceType
 {
-};
+    Pawn,
+    Knight,
+    Bishop,
+    Rook,
+    Queen,
+    King,
+} PieceType;
 
 // The color of a chessPiece
-enum PieceColor
+typedef enum PieceColor
 {
-};
+    White,
+    Black
+} PieceColor;
 
 // A single ChessPiece
 typedef struct Piece
 {
+    Pos pos; // The position of the piece on the chessBoard
+    PieceType pieceType; // The type of the piece
+    PieceColor pieceColor; // The color of the piece
 } Piece;
+
 
 #endif
