@@ -1,3 +1,7 @@
+#ifndef CCPieces
+#define CCPieces
+
+
 /* everything to work with chessPieces */
 
 // The chessPieceTypes easily defined in an enum
@@ -14,3 +18,5 @@ enum PieceColor
 typedef struct Piece
 {
 } Piece;
+
+#endif

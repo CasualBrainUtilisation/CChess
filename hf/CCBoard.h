@@ -1,5 +1,5 @@
-#ifndef CCGeneralGameInfo
-#define CCGeneralGameInfo
+#ifndef CCBoard
+#define CCBoard
 
 /* Contains some fun structs to work with the chessBoard */
 

@@ -1,5 +1,6 @@
-/* Contains structs to keep track of some data required to play a chessGame */
+#include "CCBoard.h"
 
+/* Contains structs to keep track of some data required to play a chessGame */
 
 /* Castling */
 // The current state of the castling rights
