@@ -14,11 +14,11 @@ GameInfo readFENData(char FEN[])
     char *pFenPart = strtok(FEN, " ");
 
     //This array will contain all 6 parts of the FEN divided by spaces
-    char fenParts[6];
+    char fenParts[6][128];
 
     for (int i = 0; i < 6; i++)
     {
-        fenParts[i] = pFenPart;
+        strcpy(fenParts[i], pFenPart);
         
         pFenPart = strtok(NULL, " ");
 
@@ -26,7 +26,7 @@ GameInfo readFENData(char FEN[])
     }
     
 
-    strcopy(gameInfo.currentPosAsFENString, fenParts[0]);
+    strcpy(gameInfo.currentPosAsFENString, fenParts[0]);
     gameInfo.currentTurn = White;
     GameCastlingRights gameCastlingRights = {BothSides, BothSides};
     gameInfo.gameCastlingRights = gameCastlingRights;
