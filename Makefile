@@ -4,20 +4,20 @@ output: main.o CCBoard.o CCGeneralGameInfo.o CCMoves.o CCPieces.o FEN.o
 main.o: main.c
 	gcc -c main.c
 
-CCBoard.o: hf/CCBoard.c hf/CCBoard.h:
-	gcc -c CCBoard.c
+CCBoard.o: hf/CCBoard.c hf/CCBoard.h
+	gcc -c hf/CCBoard.c
 
-CCGeneralGameInfo.o: hf/CCGeneralGameInfo.c hf/CCGeneralGameInfo.h:
-	gcc -c CCGeneralGameInfo.c
+CCGeneralGameInfo.o: hf/CCGeneralGameInfo.c hf/CCGeneralGameInfo.h
+	gcc -c hf/CCGeneralGameInfo.c
 
-CCMoves.o: hf/CCMoves.c hf/CCMoves.h:
-	gcc -c CCMoves.c
+CCMoves.o: hf/CCMoves.c hf/CCMoves.h
+	gcc -c hf/CCMoves.c
 
-CCPieces.o: hf/CCPieces.c hf/CCPieces.h:
-	gcc -c CCPieces.c
+CCPieces.o: hf/CCPieces.c hf/CCPieces.h
+	gcc -c hf/CCPieces.c
 
-FEN.o: hf/FEN.c hf/FEN.h:
-	gcc -c FEN.c
+FEN.o: hf/FEN.c hf/FEN.h
+	gcc -c hf/FEN.c
 
 clean:
 	rm *.o output

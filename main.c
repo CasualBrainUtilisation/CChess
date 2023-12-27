@@ -6,6 +6,7 @@
 
 int main()
 {
+    printf("hi");
     GameInfo gameInfo = readFENData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
     printf(gameInfo.currentPosAsFENString);
 

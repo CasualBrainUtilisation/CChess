@@ -19,6 +19,7 @@ GameInfo readFENData(char FEN[])
     for (int i = 0; i < 6; i++)
     {
         strcpy(fenParts[i], pFenPart);
+
         
         pFenPart = strtok(NULL, " ");
 
