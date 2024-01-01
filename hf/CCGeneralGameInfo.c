@@ -4,20 +4,20 @@
 /* Contains structs to keep track of some data required to play a chessGame */
 
 /* Castling */
-// The current state of the castling rights
-enum CastlingRights
+// The current state of the castling rights for one color
+typedef enum CastlingRights
 {
     BothSides,
     QueenSide,
     KingSide,
     None
-};
+} CastlingRights;
 
 // Keeps track of the castling rights for both colors in a game
 typedef struct GameCastlingRights 
 {
-    enum CastlingRights whiteCastlingRights;
-    enum CastlingRights blackCastlingRights;
+    CastlingRights whiteCastlingRights;
+    CastlingRights blackCastlingRights;
 } GameCastlingRights;
 
 
