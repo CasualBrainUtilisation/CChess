@@ -14,7 +14,7 @@ typedef enum PieceType
     Rook,
     Queen,
     King,
-    NONE, // This type is used to signalise that there is no piece present at given spot, e.g.: the hashTable of the Board struct will have pieces with PieceType NONE if there are no pieces at given pos key
+    NONE, // Certain functions may return a piece of PieceType NONE to signalise the absence if a piece
 } PieceType;
 
 // The color of a chessPiece
@@ -31,6 +31,5 @@ typedef struct Piece
     PieceType pieceType; // The type of the piece
     PieceColor pieceColor; // The color of the piece
 } Piece;
-
 
 #endif
