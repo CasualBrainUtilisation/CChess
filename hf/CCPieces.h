@@ -20,7 +20,6 @@ typedef enum PieceType
     Rook,
     Queen,
     King,
-    NONE, // Certain functions may return a piece of PieceType NONE to signalise the absence of a piece //TODO: prob remove
 } PieceType;
 
 // The color of a chessPiece    
