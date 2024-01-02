@@ -10,10 +10,10 @@ CCBoard.o: hf/CCBoard.c hf/CCBoard.h
 CCGeneralGameInfo.o: hf/CCGeneralGameInfo.c hf/CCGeneralGameInfo.h
 	gcc -c hf/CCGeneralGameInfo.c
 
-CCMoves.o: hf/CCMoves.c hf/CCMoves.h
+CCMoves.o: hf/CCMoves.h
 	gcc -c hf/CCMoves.c
 
-CCPieces.o: hf/CCPieces.c hf/CCPieces.h
+CCPieces.o: hf/CCPieces.h
 	gcc -c hf/CCPieces.c
 
 FEN.o: hf/FEN.c hf/FEN.h
