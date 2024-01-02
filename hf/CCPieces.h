@@ -14,10 +14,10 @@ typedef enum PieceType
     Rook,
     Queen,
     King,
-    NONE, // Certain functions may return a piece of PieceType NONE to signalise the absence if a piece
+    NONE, // Certain functions may return a piece of PieceType NONE to signalise the absence if a piece //TODO: prob remove
 } PieceType;
 
-// The color of a chessPiece
+// The color of a chessPiece    
 typedef enum PieceColor
 {
     White,
