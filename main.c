@@ -12,20 +12,26 @@ int main()
     // printf("%s \n", gameInfo.currentPosAsFENString);
     // printf("%d", gameInfo.currentTurn);
 
-    Board chessBoard;
-    chessBoard.headPieceData = NULL; // To make sure there aint garbage
+    Board *chessBoard = InitBoard();
 
     Pos pos = {1,2};
 
-    AddPiece(Pawn, White, pos, &chessBoard);
-    Piece *piece2 = AddPiece(Pawn, Black, pos, &chessBoard);
-    AddPiece(Bishop, White, pos, &chessBoard);
-    Piece *piece4 = AddPiece(Bishop, Black, pos, &chessBoard);
+    AddPiece(Pawn, White, pos, chessBoard);
+    Piece *piece2 = AddPiece(Pawn, Black, pos, chessBoard);
+    AddPiece(Bishop, White, pos, chessBoard);
+    Piece *piece4 = AddPiece(Bishop, Black, pos, chessBoard);
 
-    RemovePiece(piece2, &chessBoard);
-    RemovePiece(piece4, &chessBoard);
+    Pos pos2 = {2,2};
+    AddPiece(Rook, White, pos2, chessBoard);
 
-    D_PrintPieceDataList(&chessBoard);
+    RemovePiece(piece2, chessBoard);
+    RemovePiece(piece4, chessBoard);
+
+    D_PrintPieceDataList(chessBoard);
+    printf("%d", GetPieceAtPos(pos2, chessBoard)->pieceType);
+
+    free(chessBoard);
+    chessBoard = NULL;
     
     return 0;
 }

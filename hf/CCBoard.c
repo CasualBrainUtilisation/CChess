@@ -13,7 +13,7 @@ typedef struct PieceData
 } PieceData;
 
 // Struct containing info about a chessBoard aka the pieces placed on top 
-//board.headPieceData should be set to NULL immeadietly
+// Should only be initialized with the InitBoard() func
 typedef struct Board
 {
     Piece *piecesHashTable[64]; // A hashTable that uses the pos of a piece as key an stores the pointer to the piece as value, notice it actually stores the address of the pieces, which are first defined in the pAllPieces pointerarray
@@ -21,6 +21,23 @@ typedef struct Board
     PieceData *headPieceData; // The head of the linked list storing all the data of the pieces on the board //It's best to set this to null after initializing the board, to avoid filling it with garbage, which would then make the AddPiece() not work
     PieceData *lastPieceDataStored; // The last element in the headPieceData list making it easier to add pieces to the list
 } Board;
+
+// Function that should always be called to initialize a board, as it sets up certain needed things for the chessBoard
+Board *InitBoard()
+{
+    // For first create the board on the heap
+    Board *board = malloc(sizeof(Board));
+    // Must be NULL on default, which is needed for creating the list when adding the first piece, this makes sure it isn't filled with garbage
+    board->headPieceData = NULL; 
+
+    // Also make sure all the elements of the hashTable are NULL on default (as that is what represents that there is no piece here)
+    for (int i = 0; i < 64; i++)
+    {
+        board->piecesHashTable[i] = NULL;
+    }
+
+    return board;
+}
 
 /* Hashtable functions */
 // Simple function that'll return the hash of inputed pos
@@ -72,14 +89,21 @@ Piece *AddPiece(PieceType pieceType, PieceColor pieceColor, Pos pos, Board *boar
     newPiece->pieceColor = pieceColor;
     newPiece->pieceType = pieceType;
     newPiece->pos = pos;
+
     // Add the newPiece to the PieceData list, so its referenced on the board
     addPieceToPieceData(newPiece, board);
+
+    // Also add the new Piece to the piecesHashTable
+    // We'll quickly check wether collision occurs here, which then would make no sense
+    if (board->piecesHashTable[getHash(pos)] != NULL) printf("Overwriting old piece at (%d|%d) on the piecesHashTable, there should only ever be one piece at a specific pos \n", pos.X, pos.Y);
+    board->piecesHashTable[getHash(pos)] = newPiece;
+
     // Now return the added piece
     return newPiece;
 }
 
 // Removes given piece from the pieceData linked list of given board, returns 0 on success, 1 on fail
-int RemovePiece(Piece *pieceToRemove, Board *board)
+int removePieceFromPieceData(Piece *pieceToRemove, Board *board)
 {
     // To do this we'll loop through the pieceData linked list, til reaching given pieceToRemove
     // curElementOfPieceDataList keeps track of the element currently inspected in the loop, at first this will be set to the head (1st ele) of the linked list
@@ -121,6 +145,20 @@ int RemovePiece(Piece *pieceToRemove, Board *board)
     // When this is called, we went through the whole loop without finding the pieceToRemove, so print a lil notice and return 1; 
     printf("Piece To Remove not found in linked list board->headPieceData");
     return 1;
+}
+
+// Removes given Piece from given board (hashtable and pieceData linked list), returns 0 on success, 1 on fail
+int RemovePiece(Piece *pieceToRemove, Board *board)
+{
+    // First remove the piece from the pieceData linked list
+    int sucess = removePieceFromPieceData(pieceToRemove, board);
+    // As we won't check wether it makes sense to remove the piece from the hashTable, this will depend on success of the removage from the linked list
+    if (sucess == 0)
+    {
+        // Remove the piece from the piecesHashTable (aka set its hash index (value) to NULL)
+        board->piecesHashTable[getHash(pieceToRemove->pos)] = NULL;
+    }
+    return sucess;
 }
 
 /* Debug */

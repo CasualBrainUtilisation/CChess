@@ -23,9 +23,12 @@ typedef struct Board
     PieceData *lastPieceDataStored; // The last element in the headPieceData list making it easier to add pieces to the list
 } Board;
 
+// Function that should always be called to initialize a board, as it sets up certain needed things for the chessBoard
+Board *InitBoard();
+
 // Returns the piece at given pos on the given board using its piecesHashTable
 // If there is no piece at the given pos, returned piece will be NULL
-Piece *GetPieceAtPos(Pos *pos, Board *board);
+Piece *GetPieceAtPos(Pos pos, Board *board);
 
 /* PieceData linked list functions */
 // Adds a piece with given properties to the given board, added piece will be returned as pointer
