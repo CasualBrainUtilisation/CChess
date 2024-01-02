@@ -106,6 +106,10 @@ void RemovePiece(Piece *pieceToRemove, Board *board)
             free(curElementOfPieceDataList);
             curElementOfPieceDataList = NULL;
 
+            // Also free the pieceToRemove now (and set it to NULL)
+            free(pieceToRemove);
+            pieceToRemove = NULL;
+
             return; //We can end this function now, the rest is not needed to run anymore, as the pieceToRemove has already been removed
         }
 
@@ -114,7 +118,7 @@ void RemovePiece(Piece *pieceToRemove, Board *board)
         curElementOfPieceDataList = curElementOfPieceDataList->Next;
     }
 
-    printf("Piece not found");
+    printf("Piece To Remove not found");
 }
 
 /* Debug */
