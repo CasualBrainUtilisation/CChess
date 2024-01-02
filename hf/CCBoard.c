@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "CCPieces.h"
 
 
@@ -46,7 +47,7 @@ void addPieceToPieceData(Piece *pieceToAdd, Board *board)
     // Set the Next to null, as this element will be the last one on the linked list
     newPieceData->Next = NULL;
 
-    if (board->headPieceData->data == NULL) // If The linnked PieceData list is currently empty, make this newPieceData be the first element 
+    if (board->headPieceData == NULL) // If The linked PieceData list is currently empty (which it is if the head is null), make this newPieceData be the first element 
     {
         board->headPieceData = newPieceData;
         board->lastPieceDataStored = board->headPieceData;
@@ -72,4 +73,30 @@ void AddPiece(PieceType pieceType, PieceColor pieceColor, Pos pos, Board *board)
     newPiece->pos = pos;
     // Add the newPiece to the PieceData list, so its referenced on the board
     addPieceToPieceData(newPiece, board);
+}
+
+/* Debug */
+// Following functions only exist and are only used, to check wether this code actually works as expected, aka to debug
+
+// Simple function to loop through the whole linked list of pieceData on given board and simply print out each of contained elements
+void D_PrintPieceDataList(Board *board)
+{
+    // curElementOfPieceDataList keeps track of the cur element of the linked list referenced in the loop, obviously it starts at the beginning of the linked list, so we set it to the head of pieceData
+    PieceData *curElementOfPieceDataList = board->headPieceData;
+
+    int i = 0;
+    while(curElementOfPieceDataList != NULL)
+    {
+        printf("** Element %d ** \n", i);
+
+        printf("PieceColor (White : 0, Black : 1) : %d \n", curElementOfPieceDataList->data->pieceColor);
+        printf("PieceType (Pawn : 0, Horsey : 1, Bishop : 2, Rook : 3, Queen : 4, King : 5) : %d \n", curElementOfPieceDataList->data->pieceType);
+        printf("Pos : (%d|%d) \n", curElementOfPieceDataList->data->pos.X, curElementOfPieceDataList->data->pos.Y);
+
+        printf("\n");
+
+        curElementOfPieceDataList = curElementOfPieceDataList->Next;
+
+        i++;
+    }
 }

@@ -6,11 +6,23 @@
 
 int main()
 {
-    printf("hi");
-    GameInfo gameInfo = readFENData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    // printf("hi");
+    // GameInfo gameInfo = readFENData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
-    printf("%s \n", gameInfo.currentPosAsFENString);
-    printf("%d", gameInfo.currentTurn);
+    // printf("%s \n", gameInfo.currentPosAsFENString);
+    // printf("%d", gameInfo.currentTurn);
+
+    Board chessBoard;
+
+    Pos pos = {1,2};
+
+    AddPiece(Bishop, Black, pos, &chessBoard);
+    AddPiece(Bishop, Black, pos, &chessBoard);
+    AddPiece(Bishop, Black, pos, &chessBoard);
+    AddPiece(Bishop, Black, pos, &chessBoard);
+
+
+    D_PrintPieceDataList(&chessBoard);
     
     return 0;
 }

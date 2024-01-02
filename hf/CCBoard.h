@@ -13,7 +13,7 @@ typedef struct PieceData
     struct PieceData *Next; // The next element in the linked list
 } PieceData;
 
-// Struct containing info about a chessBoard aka thee pieces placed on top
+// Struct containing info about a chessBoard aka the pieces placed on top
 typedef struct Board
 {
     Piece *piecesHashTable[64]; // A hashTable that uses the pos of a piece as key an stores the pointer to the piece as value, notice it actually stores the address of the pieces, which are first defined in the pAllPieces pointerarray
@@ -26,7 +26,13 @@ typedef struct Board
 // If there is no piece at the given pos, returned piece will be NULL
 Piece *GetPieceAtPos(Pos *pos, Board *board);
 
-// Linked list functions
-void addPieceToPieceData(Piece *pieceToAdd, Board *board);
+// Adds a piece with given properties to the given board
+void AddPiece(PieceType pieceType, PieceColor pieceColor, Pos pos, Board *board);
+
+/* Debug */
+// Following functions only exist and are only used, to check wether this code actually works as expected, aka to debug
+
+// Simple function to loop through the whole linked list of pieceData on given board and simply print out each of the contained elements
+void D_PrintPieceDataList(Board *board);
 
 #endif
