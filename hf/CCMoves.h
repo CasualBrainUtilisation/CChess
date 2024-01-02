@@ -13,8 +13,7 @@ typedef enum MoveType
     EnPassant, // Google En Passant
     CastleLong, // A long castle move
     CastleShort, // A short castle move
-    Promotion, // A move resulting in pawn promotion 
-    //TODO: Unsure wether this type is needed (rn id think so, so prob remove this) 
+    Promotion, // A move resulting in pawn promotion //TODO: Unsure wether this type is needed (rn id think so, so prob remove this) 
     DoublePawnMove, // When a pawn moves 2 squares off its starting square, this is used to determinate possible en Passant moves in the next move, when performing one
 } MoveType;
 
