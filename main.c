@@ -13,14 +13,17 @@ int main()
     // printf("%d", gameInfo.currentTurn);
 
     Board chessBoard;
+    chessBoard.headPieceData = NULL; // To make sure there aint garbage
 
     Pos pos = {1,2};
 
-    AddPiece(Bishop, Black, pos, &chessBoard);
-    AddPiece(Bishop, Black, pos, &chessBoard);
-    AddPiece(Bishop, Black, pos, &chessBoard);
-    AddPiece(Bishop, Black, pos, &chessBoard);
+    AddPiece(Pawn, White, pos, &chessBoard);
+    Piece *piece2 = AddPiece(Pawn, Black, pos, &chessBoard);
+    AddPiece(Bishop, White, pos, &chessBoard);
+    Piece *piece4 = AddPiece(Bishop, Black, pos, &chessBoard);
 
+    RemovePiece(piece2, &chessBoard);
+    RemovePiece(piece4, &chessBoard);
 
     D_PrintPieceDataList(&chessBoard);
     
