@@ -14,7 +14,7 @@ typedef struct PieceData
 } PieceData;
 
 // Struct containing info about a chessBoard aka the pieces placed on top 
-//board.headPieceData should be set to NULL immeadietly
+// Should only be initialized with the InitBoard() func
 typedef struct Board
 {
     Piece *piecesHashTable[64]; // A hashTable that uses the pos of a piece as key an stores the pointer to the piece as value, notice it actually stores the address of the pieces, which are first defined in the pAllPieces pointerarray
