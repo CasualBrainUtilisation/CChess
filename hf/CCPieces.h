@@ -1,9 +1,15 @@
 #ifndef CCPieces
 #define CCPieces
 
-#include "CCBoard.h"
+/* Contains enums for the Piece struct, that is also defined in here, aswell as the pos struct */
 
-/* Contains enums for the Piece struct, that is also defined in here */
+// Pos represents a position on the chessBoard
+// This can be imagined like a cordinate system on the board
+typedef struct Vector2
+{
+    int X; // The X represents the files of the ChessBoard (The numbers 1 - 8 (although we use the scope of 0-7))
+    int Y; // The Y represents the ranks of the ChessBoard (The letters a - h (with 0-7))
+} Pos;
 
 // The chessPieceTypes easily defined in an enum
 typedef enum PieceType
@@ -14,7 +20,7 @@ typedef enum PieceType
     Rook,
     Queen,
     King,
-    NONE, // Certain functions may return a piece of PieceType NONE to signalise the absence if a piece //TODO: prob remove
+    NONE, // Certain functions may return a piece of PieceType NONE to signalise the absence of a piece //TODO: prob remove
 } PieceType;
 
 // The color of a chessPiece    
