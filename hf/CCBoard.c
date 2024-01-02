@@ -78,8 +78,8 @@ Piece *AddPiece(PieceType pieceType, PieceColor pieceColor, Pos pos, Board *boar
     return newPiece;
 }
 
-// Removes given piece from the pieceData linked list of given board
-void RemovePiece(Piece *pieceToRemove, Board *board)
+// Removes given piece from the pieceData linked list of given board, returns 0 on success, 1 on fail
+int RemovePiece(Piece *pieceToRemove, Board *board)
 {
     // To do this we'll loop through the pieceData linked list, til reaching given pieceToRemove
     // curElementOfPieceDataList keeps track of the element currently inspected in the loop, at first this will be set to the head (1st ele) of the linked list
@@ -110,7 +110,7 @@ void RemovePiece(Piece *pieceToRemove, Board *board)
             free(pieceToRemove);
             pieceToRemove = NULL;
 
-            return; //We can end this function now, the rest is not needed to run anymore, as the pieceToRemove has already been removed
+            return 0; //We can end this function now, the rest is not needed to run anymore, as the pieceToRemove has already been removed, return 0 to indicate sucess
         }
 
         // Move on to the next element foreach pointer
@@ -118,7 +118,9 @@ void RemovePiece(Piece *pieceToRemove, Board *board)
         curElementOfPieceDataList = curElementOfPieceDataList->Next;
     }
 
-    printf("Piece To Remove not found");
+    // When this is called, we went through the whole loop without finding the pieceToRemove, so print a lil notice and return 1; 
+    printf("Piece To Remove not found in linked list board->headPieceData");
+    return 1;
 }
 
 /* Debug */
