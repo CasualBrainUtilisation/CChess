@@ -37,6 +37,9 @@ Piece *AddPiece(PieceType pieceType, PieceColor pieceColor, Pos pos, Board *boar
 // Removes given piece from the pieceData linked list of given board, returns 0 on success, 1 on fail
 void RemovePiece(Piece *pieceToRemove, Board *board);
 
+// This function will free all the parts of the chessBoard freeing is required for and make sure everything allocated is properly deleted
+void DeleteChessBoard(Board **board);
+
 /* Debug */
 // Following functions only exist and are only used, to check wether this code actually works as expected, aka to debug
 

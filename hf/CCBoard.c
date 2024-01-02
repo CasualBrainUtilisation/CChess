@@ -17,7 +17,7 @@ typedef struct PieceData
 typedef struct Board
 {
     Piece *piecesHashTable[64]; // A hashTable that uses the pos of a piece as key an stores the pointer to the piece as value, notice it actually stores the address of the pieces, which are first defined in the pAllPieces pointerarray
-    // This hashtable comes in handy, cuz it improves performance when checking for a piece at a boardPos //TODO: either give use or remove
+    // This hashtable comes in handy, cuz it improves performance when checking for a piece at a boardPos
     PieceData *headPieceData; // The head of the linked list storing all the data of the pieces on the board //It's best to set this to null after initializing the board, to avoid filling it with garbage, which would then make the AddPiece() not work
     PieceData *lastPieceDataStored; // The last element in the headPieceData list making it easier to add pieces to the list
 } Board;
@@ -126,13 +126,10 @@ int removePieceFromPieceData(Piece *pieceToRemove, Board *board)
                 // Set the Next of the previous element to the next of the current, so the current is skipped in the linked lists and already removed from the list (not from mem)
                 previousElementOfPieceDataList->Next = curElementOfPieceDataList->Next;
             }
-            // After this curElementOfPieceDataList simply needs to be freed to also remove it from memory and the poniter will be set to NULL (this is unecessary but good practice)
+
+            // After this curElementOfPieceDataList simply needs to be freed to also remove it from memory and the pointer will be set to NULL (this is unecessary but good practice)
             free(curElementOfPieceDataList);
             curElementOfPieceDataList = NULL;
-
-            // Also free the pieceToRemove now (and set it to NULL)
-            free(pieceToRemove);
-            pieceToRemove = NULL;
 
             return 0; //We can end this function now, the rest is not needed to run anymore, as the pieceToRemove has already been removed, return 0 to indicate sucess
         }
@@ -158,6 +155,11 @@ int RemovePiece(Piece *pieceToRemove, Board *board)
         // Remove the piece from the piecesHashTable (aka set its hash index (value) to NULL)
         board->piecesHashTable[getHash(pieceToRemove->pos)] = NULL;
     }
+
+    // Also free the pieceToRemove now, as its been removed from the hashTable and the linked pieceData list (and set it to NULL)
+    free(pieceToRemove);
+    pieceToRemove = NULL;
+
     return sucess;
 }
 
@@ -185,4 +187,36 @@ void D_PrintPieceDataList(Board *board)
 
         i++;
     }
+}
+
+// This function will free all the parts of the chessBoard freeing is required for and make sure everything allocated is properly deleted
+void DeleteChessBoard(Board **board)
+{
+    // For this purpose we'll loop through the whole piece Data linked list of the board and free every single part of it, aswell as stored pieces
+    // curElementOfPieceDataList keeps track of the cur element of the linked list referenced in the loop, obviously it starts at the beginning of the linked list, so we set it to the head of pieceData
+    PieceData *curElementOfPieceDataList = (*board)->headPieceData;
+
+    while(curElementOfPieceDataList != NULL)
+    {
+        // Store the element we want to delete in a seperate pointer
+        PieceData *pieceDataToDelete = curElementOfPieceDataList;
+        // Change the curElement to the next as long as we still have access to the current
+        curElementOfPieceDataList = curElementOfPieceDataList->Next;
+
+        // Start by freeing the data part (which is the stored piece)
+        free(pieceDataToDelete->data);
+        pieceDataToDelete->data = NULL;
+
+        // Now free the pieceData itself
+        free(pieceDataToDelete);
+        curElementOfPieceDataList = NULL;
+    }
+
+    // Also set all these pointers to be null now
+    (*board)->headPieceData = NULL;
+    (*board)->lastPieceDataStored = NULL;
+
+    // At last free the board itself
+    free(*board);
+    board = NULL;
 }

@@ -37,10 +37,7 @@ int main()
         printf("f \n");
     }
 
-
-
-    free(chessBoard);
-    chessBoard = NULL;
+    DeleteChessBoard(&chessBoard);
     
     return 0;
 }
