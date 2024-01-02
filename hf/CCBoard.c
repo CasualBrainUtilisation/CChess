@@ -65,7 +65,7 @@ void addPieceToPieceData(Piece *pieceToAdd, Board *board)
     // Set the Next to null, as this element will be the last one on the linked list
     newPieceData->Next = NULL;
 
-    if (board->headPieceData == NULL) // If The linked PieceData list is currently empty (which it is if the head is null), make this newPieceData be the first element 
+    if (board->headPieceData == NULL) // If the linked PieceData list is currently empty (which it is if the head is null), make this newPieceData be the first element 
     {
         board->headPieceData = newPieceData;
         board->lastPieceDataStored = board->headPieceData;

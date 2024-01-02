@@ -28,7 +28,16 @@ int main()
     RemovePiece(piece4, chessBoard);
 
     D_PrintPieceDataList(chessBoard);
-    printf("%d", GetPieceAtPos(pos2, chessBoard)->pieceType);
+    printf("%d \n", GetPieceAtPos(pos2, chessBoard)->pieceType);
+
+    Pos newPos = {0, 0};
+    Piece *piece = GetPieceAtPos(newPos, chessBoard);
+    if (piece == NULL)
+    {
+        printf("f \n");
+    }
+
+
 
     free(chessBoard);
     chessBoard = NULL;
