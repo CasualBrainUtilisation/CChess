@@ -264,6 +264,4 @@ void PerformMove(Move *moveToPerform, Board *board)
     moveToPerform->PieceToMove->pos = moveToPerform->moveTargetPos;
     // Now update its pos in the piecesHashTable
     updatePiecePosInHashTable(moveToPerform->PieceToMove, oldPos, board);
-
-    
 }
