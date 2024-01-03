@@ -18,8 +18,8 @@ typedef enum MoveType
 // Stores all information needed about any chessMove
 typedef struct Move
 {
-    Pos moveTargetPos; // The Position the piece will be moved to, when performing this move
     Pos moveStartPos; // The pos the pieceToMove is placed before the move is performed
+    Pos moveTargetPos; // The Position the piece will be moved to, when performing this move
 
     Piece *PieceToMove; // The Piece that will be moved when this move is performed
     Piece *PieceToCapture; // The Piece that will be captured when this move is performed, in case there actually is no piece that will be captured by this move, this Pointer will be NULL

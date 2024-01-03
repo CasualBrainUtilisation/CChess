@@ -37,6 +37,17 @@ int main()
         printf("f \n");
     }
 
+    Pos startPos = {5, 5};
+    Pos targetPos = {4, 4};
+    Piece *pieceToMove = AddPiece(Queen, White, startPos, chessBoard);
+    Piece *pieceToCapture = AddPiece(Queen, Black, targetPos, chessBoard);
+    Move move = {startPos, targetPos, pieceToMove, pieceToCapture};
+    PerformMove(move, chessBoard);
+
+    Piece *pieceAtTargetPos = GetPieceAtPos(targetPos, chessBoard);
+    if (pieceAtTargetPos == NULL) printf("WHAT \n");
+    D_PrintPiece(pieceAtTargetPos, "TargetPos (Hopefully contains white queen)");
+
     DeleteChessBoard(&chessBoard);
     printf("%p", chessBoard);
     

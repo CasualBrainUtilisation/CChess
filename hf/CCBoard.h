@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include "CCPieces.h"
+#include "CCMoves.h"
 
 /* Contains the ChessBoard and all the functions that impact or require the ChessBoard struct */
 
@@ -45,5 +46,14 @@ void DeleteChessBoard(Board **board);
 
 // Simple function to loop through the whole linked list of pieceData on given board and simply print out each of the contained elements
 void D_PrintPieceDataList(Board *board);
+
+// Prints all information about given piece
+void D_PrintPiece(Piece *piece, char name[]);
+
+/* Moves */
+// Following functions will all be related to moves
+
+// Performs given move on given board
+void PerformMove(Move moveToPerform, Board *board);
 
 #endif

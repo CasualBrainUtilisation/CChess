@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "CCPieces.h"
+#include "CCMoves.h"
 
 
 /* Contains the ChessBoard and all the functions that impact or require the ChessBoard struct */
@@ -52,6 +53,18 @@ int getHash(Pos pos)
 Piece *GetPieceAtPos(Pos pos, Board *board)
 {
     return board->piecesHashTable[getHash(pos)];
+}
+
+// Updates the key in the hashTable of given board for given piece
+// This should be called after changing the position of a piece
+void updatePiecePosInHashTable(Piece *pieceToUpdate, Pos oldPos, Board *board)
+{
+    // Remove piece from old key value
+    board->piecesHashTable[getHash(oldPos)] = NULL;
+    // Check wether we're overwriting a piece, if so prompt that
+    if (board->piecesHashTable[getHash(pieceToUpdate->pos)] != NULL) printf("Overwriting old piece at (%d|%d) on the piecesHashTable, you are moving a piece on a square that already contains one \n", pieceToUpdate->pos.X, pieceToUpdate->pos.Y);
+    // Add piece to the new key value
+    board->piecesHashTable[getHash(pieceToUpdate->pos)] = pieceToUpdate;
 }
 
 /* Linked List functions */
@@ -219,4 +232,38 @@ void D_PrintPieceDataList(Board *board)
 
         i++;
     }
+}
+
+// Prints all information about given piece
+void D_PrintPiece(Piece *piece, char name[])
+{   
+    printf("*********************************   Element %s   ***********************************\n", name);
+
+    printf("PieceColor (White : 0, Black : 1) :                                           %d \n", piece->pieceColor);
+    printf("PieceType (Pawn : 0, Horsey : 1, Bishop : 2, Rook : 3, Queen : 4, King : 5) : %d \n", piece->pieceType);
+    printf("Pos :                                                                        (%d|%d) \n", piece->pos.X, piece->pos.Y);
+    
+    printf("\n");
+}
+
+/* Moves */
+// Following functions will all be related to moves
+
+// Performs given move on given board
+void PerformMove(Move *moveToPerform, Board *board)
+{
+    // First remove the piece to capture
+    if (moveToPerform->PieceToCapture != NULL)
+    {
+        RemovePiece(moveToPerform->PieceToCapture, board);
+    }
+
+    // Store the oldPos of the piece, so we can change its pos in the piecesHashTable later on
+    Pos oldPos = moveToPerform->PieceToMove->pos;
+    // Move pieceToMove to target pos, 
+    moveToPerform->PieceToMove->pos = moveToPerform->moveTargetPos;
+    // Now update its pos in the piecesHashTable
+    updatePiecePosInHashTable(moveToPerform->PieceToMove, oldPos, board);
+
+    
 }
