@@ -41,7 +41,7 @@ Board *InitBoard()
 }
 
 /* Hashtable functions */
-// Simple function that'll return the hash of inputed pos
+// Simple function that'll return the hash of inputed pos, those should though go from 1-8 (not 0-7)
 // ALL poses have a unique hash
 int getHash(Pos pos)
 {

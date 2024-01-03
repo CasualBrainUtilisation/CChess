@@ -4,11 +4,11 @@
 /* Contains enums for the Piece struct, that is also defined in here, aswell as the pos struct */
 
 // Pos represents a position on the chessBoard
-// This can be imagined like a cordinate system on the board
+// This can be imagined like a cordinate system on the board from 1-8 on x and y
 typedef struct Vector2
 {
-    int X; // The X represents the files of the ChessBoard (The numbers 1 - 8 (although we use the scope of 0-7))
-    int Y; // The Y represents the ranks of the ChessBoard (The letters a - h (with 0-7))
+    int X; // The X represents the files of the ChessBoard (The numbers 1 - 8)
+    int Y; // The Y represents the ranks of the ChessBoard (The letters a - h (with 1-8))
 } Pos;
 
 // The chessPieceTypes easily defined in an enum
