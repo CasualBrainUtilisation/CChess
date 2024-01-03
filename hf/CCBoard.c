@@ -163,32 +163,6 @@ int RemovePiece(Piece *pieceToRemove, Board *board)
     return sucess;
 }
 
-/* Debug */
-// Following functions only exist and are only used, to check wether this code actually works as expected, aka to debug
-
-// Simple function to loop through the whole linked list of pieceData on given board and simply print out each of contained elements
-void D_PrintPieceDataList(Board *board)
-{
-    // curElementOfPieceDataList keeps track of the cur element of the linked list referenced in the loop, obviously it starts at the beginning of the linked list, so we set it to the head of pieceData
-    PieceData *curElementOfPieceDataList = board->headPieceData;
-
-    int i = 0;
-    while(curElementOfPieceDataList != NULL)
-    {
-        printf("*********************************   Element %d   ***********************************\n", i);
-
-        printf("PieceColor (White : 0, Black : 1) :                                           %d \n", curElementOfPieceDataList->data->pieceColor);
-        printf("PieceType (Pawn : 0, Horsey : 1, Bishop : 2, Rook : 3, Queen : 4, King : 5) : %d \n", curElementOfPieceDataList->data->pieceType);
-        printf("Pos :                                                                        (%d|%d) \n", curElementOfPieceDataList->data->pos.X, curElementOfPieceDataList->data->pos.Y);
-
-        printf("\n");
-
-        curElementOfPieceDataList = curElementOfPieceDataList->Next;
-
-        i++;
-    }
-}
-
 // This function will free all the parts of the chessBoard freeing is required for and make sure everything allocated is properly deleted
 void DeleteChessBoard(Board **board)
 {
@@ -219,4 +193,30 @@ void DeleteChessBoard(Board **board)
     // At last free the board itself
     free(*board);
     board = NULL;
+}
+
+/* Debug */
+// Following functions only exist and are only used, to check wether this code actually works as expected, aka to debug
+
+// Simple function to loop through the whole linked list of pieceData on given board and simply print out each of contained elements
+void D_PrintPieceDataList(Board *board)
+{
+    // curElementOfPieceDataList keeps track of the cur element of the linked list referenced in the loop, obviously it starts at the beginning of the linked list, so we set it to the head of pieceData
+    PieceData *curElementOfPieceDataList = board->headPieceData;
+
+    int i = 0;
+    while(curElementOfPieceDataList != NULL)
+    {
+        printf("*********************************   Element %d   ***********************************\n", i);
+
+        printf("PieceColor (White : 0, Black : 1) :                                           %d \n", curElementOfPieceDataList->data->pieceColor);
+        printf("PieceType (Pawn : 0, Horsey : 1, Bishop : 2, Rook : 3, Queen : 4, King : 5) : %d \n", curElementOfPieceDataList->data->pieceType);
+        printf("Pos :                                                                        (%d|%d) \n", curElementOfPieceDataList->data->pos.X, curElementOfPieceDataList->data->pos.Y);
+
+        printf("\n");
+
+        curElementOfPieceDataList = curElementOfPieceDataList->Next;
+
+        i++;
+    }
 }

@@ -11,7 +11,10 @@ CCGeneralGameInfo.o: hf/CCGeneralGameInfo.c hf/CCGeneralGameInfo.h
 	gcc -c hf/CCGeneralGameInfo.c
 
 FEN.o: hf/FEN.c hf/FEN.h
-	gcc -c hf/FEN.c
+	gcc -c hf/FEN.c -
+
+debug: main.o CCBoard.o CCGeneralGameInfo.o FEN.o
+	gcc main.o CCBoard.o CCGeneralGameInfo.o FEN.o -o debug -g -ggdb
 
 clean:
 	rm *.o output
