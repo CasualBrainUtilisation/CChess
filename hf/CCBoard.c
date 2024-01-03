@@ -183,7 +183,7 @@ void DeleteChessBoard(Board **board)
 
         // Now free the pieceData itself
         free(pieceDataToDelete);
-        curElementOfPieceDataList = NULL;
+        pieceDataToDelete = NULL;
     }
 
     // Also set all these pointers to be null now
@@ -192,7 +192,7 @@ void DeleteChessBoard(Board **board)
 
     // At last free the board itself
     free(*board);
-    board = NULL;
+    *board = NULL;
 }
 
 /* Debug */

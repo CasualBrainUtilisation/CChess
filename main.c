@@ -38,6 +38,7 @@ int main()
     }
 
     DeleteChessBoard(&chessBoard);
+    printf("%p", chessBoard);
     
     return 0;
 }
