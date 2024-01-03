@@ -55,3 +55,4 @@ dkms.conf
 .ccls-cache/
 .replit
 replit.nix
+output
