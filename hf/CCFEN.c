@@ -96,7 +96,6 @@ ChessGame *GetGameFromFEN(char FEN[])
                 break;
             }
         }
-
     }
     
     // Continue reading the FEN string, next will be information about the current player turn
@@ -188,10 +187,46 @@ ChessGame *GetGameFromFEN(char FEN[])
         }
     }
 
-    loadedChessGameFromFEN->nextMoveNumber = 3;
-    loadedChessGameFromFEN->playedHalfMoves = 50;
-    Pos enPassantPos = {120, 120};
-    loadedChessGameFromFEN->possibleEnPassantDestinationPos = &enPassantPos;
+
+    /* En Passant */
+    // Continue reading the FEN string, next will be the possible En Passant move
+    char *pPossibleEnPassantMovesFENPart = strtok(NULL, " ");
+    // Get the Pos from the pPossibleEnPassantMovesFENPart field notation, GetPosFromSquareString will return NULL if this notation is invalid, though we'll just take the NULL then //TODO: idk prob make thinks like this actually not work
+    loadedChessGameFromFEN->possibleEnPassantDestinationPos = GetPosFromFieldNotation(pPossibleEnPassantMovesFENPart);
+    
+
+    /* PlayedHalfMoves */
+    // Continue reading the FEN string, next will be the playedHalfMoves
+    char *pPlayedHalfMovesFENPart = strtok(NULL, " ");
+
+    // Set errno to 0, as we'll have to check wether following strtol() returns an error
+    errno = 0;
+    // We'll use strtol() to get the int represented in the pPlayedHalfMovesFENPart
+    loadedChessGameFromFEN->playedHalfMoves = strtol(pPlayedHalfMovesFENPart, NULL, 10);
+
+    // Check wether errno ain't 0 anymore, which would mean that in strtol something went wrong, so return NULL and free allocated mem
+    if (errno != 0)
+    {
+        DeleteChessGame(&loadedChessGameFromFEN);
+        return NULL;
+    }
+
+
+    /* NextMoveNumber */
+    // Continue reading the FEN string, next will be the nextMoveNumber
+    char *pNextMoveNumberFENPart = strtok(NULL, " ");
+
+    // Set errno to 0, as we'll have to check wether following strtol returns an error
+    errno = 0;
+    // We'll use strtol to get the int represented in the pNextMoveNumberFENPart
+    loadedChessGameFromFEN->nextMoveNumber = strtol(pNextMoveNumberFENPart, NULL, 10);
+
+    // Check wether errno ain't 0 anymore, which would mean that in strtol something went wrong, so return NULL and free allocated mem
+    if (errno != 0)
+    {
+        DeleteChessGame(&loadedChessGameFromFEN);
+        return NULL;
+    }
 
     return loadedChessGameFromFEN;
 }
