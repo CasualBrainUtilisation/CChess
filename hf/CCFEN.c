@@ -17,17 +17,17 @@ ChessGame *GetGameFromFEN(char FEN[])
     }
 
     // For first, create an empty ChessGame-struct, this will be filled with information from the FEN string
-    ChessGame *loadedChessGameFromFEN = malloc(sizeof(ChessGame));
+    ChessGame *loadedChessGameFromFEN = InitChessGame(); //TODO: create init()
 
     // Create a new char[] copied from FEN, so we have acces to its address, and we don't care about it changing with strtok
     char FENToRead[128];
     strcpy(FENToRead, FEN); //FIXME: Unsure about strcpy beeing safe
 
+
+    /* Piece Placement*/
+
     // Get the first part of the FEN string (containing info about the chessPiecePlacement)
     char *pPiecePlacementFENPart = strtok(FENToRead, " ");
-    
-    // Now create a board and fill it using the pPiecePlacementFENPart extracted from the FEN[]
-    loadedChessGameFromFEN->board = InitBoard();
 
     // We'll loop through the whole pPiecePlacementFENPart array in order to place all the pieces accordingly on the new board
 
@@ -39,9 +39,10 @@ ChessGame *GetGameFromFEN(char FEN[])
     for (char curChar = *pPiecePlacementFENPart; curChar != '\0'; curChar = *++pPiecePlacementFENPart)
     {
         // In case x is over 8 and y is over 7, the FEN must have been invalid so free opened memory and return NULL
+        // Notice though that calling this here will not check effects of the last char, which could be invalid, but that doesn't matter
         if (x >= 9 || y >= 8)
         {
-            free(loadedChessGameFromFEN);
+            DeleteChessGame(&loadedChessGameFromFEN);
             return NULL;
         }
 
@@ -77,6 +78,13 @@ ChessGame *GetGameFromFEN(char FEN[])
             // If the pieceChar actually matches the curChar, add according piece to the board
             if (curPieceChar == tolower(curChar))
             {
+                // If the piece is supposed to be placed outside the bounds of the chessBoard return NULL and free allocated memory, as the FEN must be invalid
+                if (x >= 8 || y >= 8)
+                {
+                    DeleteChessGame(&loadedChessGameFromFEN);
+                    return NULL;
+                }
+
                 // Add the piece to the board
                 Pos pieceToAddPos = {x, y};
                 AddPiece(curPieceCharIndex, islower(curChar), pieceToAddPos, loadedChessGameFromFEN->board);
@@ -93,17 +101,93 @@ ChessGame *GetGameFromFEN(char FEN[])
     
     // Continue reading the FEN string, next will be information about the current player turn
     char *pCurrentTurnFENPart = strtok(NULL, " ");
-    if (tolower(pCurrentTurnFENPart[0]) == 'w') //Check weter the letter "w" is represented here, in that case, its white's turn
+    if (tolower(pCurrentTurnFENPart[0]) == 'w') // Check weter the letter 'w' is represented here, in that case, its white's turn
     {
         loadedChessGameFromFEN->currentTurn = White;
     }
-    else if (tolower(pCurrentTurnFENPart[0]) == 'b') 
+    else if (tolower(pCurrentTurnFENPart[0]) == 'b') // Else if the letter 'b' is repreesented here, it's black's turn
     {
         loadedChessGameFromFEN->currentTurn = Black;
     }
-    
-    GameCastlingRights gameCastlingRights = {BothSides, BothSides};
-    loadedChessGameFromFEN->gameCastlingRights = gameCastlingRights;
+    else // If though neither 'b' nor 'w' are represented here, the FEN is invalid so free allocated mem and return NULL
+    {
+        DeleteChessGame(&loadedChessGameFromFEN);
+        return NULL;
+    }
+
+    /* Castling Rights */
+    // For getting the castling rights from the FEN, we assume that the loadedChessGameFromFEN->gameCastlingRights for white and black are both set to None on default!!
+
+    // Continue reading the FEN string, next will be information about the castling rights of the players
+    char *pCastlingRightsFENPart = strtok(NULL, " ");
+    // We'll check each char of the string for implementing castling rights
+    for (char curCastlingRightsChar = *pCastlingRightsFENPart; curCastlingRightsChar != '\0'; curCastlingRightsChar = *++pCastlingRightsFENPart)
+    {
+        // Depending on the current char we'll react differently
+        switch(curCastlingRightsChar)
+        {
+            // In case it's an 'Q', white can castle queenside
+            case 'Q' :
+                // So as long as there are no castling rights set for white yet, set them to QueenSide
+                if (loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights == None)
+                {
+                    loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights = QueenSide;
+                } 
+                // If there are already castlingRights set for white, these should be kingside, so just set to both
+                else
+                {
+                    loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights = BothSides;
+                }
+                break;
+            // In case it's an 'K', white can castle kingside
+            case 'K' :
+                // So as long as there are no castling rights set for white yet, set them to Kingside
+                if (loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights == None)
+                {
+                    loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights = KingSide;
+                } 
+                // If there are already castlingRights set for white, these should be queeenside, so just set to both
+                else
+                {
+                    loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights = BothSides;
+                }
+                break;
+            // In case it's an 'q', black can castle queenside
+            case 'q' :
+                // So as long as there are no castling rights set for black yet, set them to queenside
+                if (loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights == None)
+                {
+                    loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights = QueenSide;
+                } 
+                // If there are already castlingRights set for black, these should be kingside, so just set to both
+                else
+                {
+                    loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights = BothSides;
+                }
+                break;
+            // In case it's an 'k', black can castle kingside
+            case 'k' :
+                // So as long as there are no castling rights set for black yet, set them to kingside
+                if (loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights == None)
+                {
+                    loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights = KingSide;
+                } 
+                // If there are already castlingRights set for black, these should be queenside, so just set to both
+                else
+                {
+                    loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights = BothSides;
+                }
+                break;
+            // A '-' indicates that no castling rights are to be set, so just leave them at the default NONE
+            case '-' :
+                break;
+            // If there is any other character here, the FEN is invalid, so free allocated mem and return NULL
+            default :
+                DeleteChessGame(&loadedChessGameFromFEN);
+                return NULL;
+        }
+    }
+
     loadedChessGameFromFEN->nextMoveNumber = 3;
     loadedChessGameFromFEN->playedHalfMoves = 50;
     Pos enPassantPos = {120, 120};

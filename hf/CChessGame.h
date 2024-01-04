@@ -10,10 +10,10 @@
 // The current state of the castling rights
 typedef enum CastlingRights
 {
-    BothSides,
+    None,
     QueenSide,
     KingSide,
-    None
+    BothSides
 } CastlingRights;
 
 // Keeps track of the castling rights for both colors in a game
@@ -35,5 +35,11 @@ typedef struct ChessGame //TODO: add gameHistory
     int playedHalfMoves; // Amount of moves since last capture or pawn moves (Used for draw rules)
     int nextMoveNumber; // The number of the next move to be performed
 } ChessGame;
+
+// Function that should always be called to initialize a chessGame as it sets up some things needed for the board to function expectedly (mainly zeroing and malloc())
+ChessGame *InitChessGame();
+
+// This function will free every part of given chessGame freeing is required for aka everything malloc() was used for
+void DeleteChessGame(ChessGame **chessGame);
 
 #endif
