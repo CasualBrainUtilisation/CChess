@@ -41,7 +41,7 @@ Board *InitBoard()
 }
 
 /* Hashtable functions */
-// Simple function that'll return the hash of inputed pos, those should though go from 0-7 (else we'll gave collisions (which are not handled by the piecesHashTable))
+// Simple function that'll return the hash of inputed pos, those should though go from 0-7 (else we'll have collisions (which are not handled by the piecesHashTable))
 // ALL poses from 0|0 to 7|7 have a unique hash
 int getHash(Pos pos)
 {
