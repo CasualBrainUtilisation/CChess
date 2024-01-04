@@ -8,6 +8,7 @@
 
 /* Castling */
 // The current state of the castling rights
+// There actually is a beautiful way of adding castlingRights, (mathematically) add the current one (None  + Queenside = QueenSide / KingSide + QueenSide = Both), and removing (subtract it (BothSides - KingSide = QueenSide))
 typedef enum CastlingRights
 {
     None,

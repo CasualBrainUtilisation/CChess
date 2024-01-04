@@ -128,55 +128,23 @@ ChessGame *GetGameFromFEN(char FEN[])
         {
             // In case it's an 'Q', white can castle queenside
             case 'Q' :
-                // So as long as there are no castling rights set for white yet, set them to QueenSide
-                if (loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights == None)
-                {
-                    loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights = QueenSide;
-                } 
-                // If there are already castlingRights set for white, these should be kingside, so just set to both
-                else
-                {
-                    loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights = BothSides;
-                }
+                // So add QueenSideRights for white
+                loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights += QueenSide;
                 break;
             // In case it's an 'K', white can castle kingside
             case 'K' :
-                // So as long as there are no castling rights set for white yet, set them to Kingside
-                if (loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights == None)
-                {
-                    loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights = KingSide;
-                } 
-                // If there are already castlingRights set for white, these should be queeenside, so just set to both
-                else
-                {
-                    loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights = BothSides;
-                }
+                // So add KingSideRights for white
+                loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights += KingSide;
                 break;
             // In case it's an 'q', black can castle queenside
             case 'q' :
-                // So as long as there are no castling rights set for black yet, set them to queenside
-                if (loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights == None)
-                {
-                    loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights = QueenSide;
-                } 
-                // If there are already castlingRights set for black, these should be kingside, so just set to both
-                else
-                {
-                    loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights = BothSides;
-                }
+                // So add QueenSideRights for black
+                loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights += QueenSide;
                 break;
             // In case it's an 'k', black can castle kingside
             case 'k' :
-                // So as long as there are no castling rights set for black yet, set them to kingside
-                if (loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights == None)
-                {
-                    loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights = KingSide;
-                } 
-                // If there are already castlingRights set for black, these should be queenside, so just set to both
-                else
-                {
-                    loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights = BothSides;
-                }
+                // So add KingSideRights for black
+                loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights += KingSide;
                 break;
             // A '-' indicates that no castling rights are to be set, so just leave them at the default NONE
             case '-' :
