@@ -10,10 +10,10 @@ void PrintBoard(Board *board)
     // Each piece will be visiualized with the char at the index of its pieceType in pieceVisualization[6]
     char pieceVisualization[6] = "pnbrqk";
 
-    // Scout through the whole board and print each piece
-    for (int y = 1; y <= 8; y++)
+    // Scout through the whole board and print each piece, notice that scouting in the order of y -> x is making printing the board out way simpler
+    for (int y = 0; y < 8; y++)
     {
-        for (int x = 1; x <= 8; x++)
+        for (int x = 0; x < 8; x++)
         {
             // Get the current pos in the loop
             Pos pos = {x, y};

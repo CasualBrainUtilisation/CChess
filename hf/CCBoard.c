@@ -41,11 +41,11 @@ Board *InitBoard()
 }
 
 /* Hashtable functions */
-// Simple function that'll return the hash of inputed pos, those should though go from 1-8 (not 0-7)
-// ALL poses have a unique hash
+// Simple function that'll return the hash of inputed pos, those should though go from 0-7 (else we'll gave collisions (which are not handled by the piecesHashTable))
+// ALL poses from 0|0 to 7|7 have a unique hash
 int getHash(Pos pos)
 {
-    return pos.X * 8 - pos.Y;
+    return pos.X * 8 + pos.Y;
 }
 
 // Returns the piece at given pos on the given board using its piecesHashTable

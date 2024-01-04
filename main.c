@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "hf/CCBoard.h"
-#include "hf/FEN.h"
-#include "hf/CCGeneralGameInfo.h"
+#include "hf/CCFEN.h"
+#include "hf/CChessGame.h"
 #include "hf/CCVisualizer.h"
 
 
@@ -13,11 +13,11 @@ int main()
     // printf("%s \n", gameInfo.currentPosAsFENString);
     // printf("%d", gameInfo.currentTurn);
 
-    Board *chessBoard = InitBoard();
+    ChessGame *chessGame = GetGameFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
-    PrintBoard(chessBoard);
+    PrintBoard(chessGame->board);
 
-    DeleteChessBoard(&chessBoard);
+    DeleteChessBoard(&chessGame->board);
 
     return 0;
 }
