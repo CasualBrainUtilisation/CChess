@@ -7,12 +7,6 @@
 
 int main()
 {
-    // printf("hi");
-    // GameInfo gameInfo = readFENData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-
-    // printf("%s \n", gameInfo.currentPosAsFENString);
-    // printf("%d", gameInfo.currentTurn);
-
     ChessGame *chessGame = GetGameFromFEN("rnbqkbnr/1p1p1ppp/8/pPp1p3/4P3/8/P1PP1PPP/RNBQKBNR w KQkq a6 0 4");
     if(chessGame == NULL) printf("now i have to cry \n");
 
