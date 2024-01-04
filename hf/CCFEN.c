@@ -10,8 +10,8 @@
 // Read the data from any FEN and return game from it, or return NULL to indicate an invalid FEN
 ChessGame *GetGameFromFEN(char FEN[])
 {   
-    // If the FEN is to large (It generally already is at a size of about over 90, but in this case we caree wether it is too large to be copied in the FENToRead array created later) already return with valid beeing 1, to indicate failure //TODO: Make sure all strings this func gets are null terminated !
-    if (strlen(FEN) >= 128) //FIXME: not sure wether this is actually safe
+    // If the FEN is to large (It generally already is at a size of about over 90, but in this case we caree wether it is too large to be copied in the FENToRead array created later) already return with valid beeing 1, to indicate failure // Make sure all strings this func gets are null terminated (for strlen()) !
+    if (strlen(FEN) >= 128)
     {
         return NULL;
     }
@@ -21,7 +21,7 @@ ChessGame *GetGameFromFEN(char FEN[])
 
     // Create a new char[] copied from FEN, so we have acces to its address, and we don't care about it changing with strtok
     char FENToRead[128];
-    strcpy(FENToRead, FEN); //FIXME: Unsure about strcpy beeing safe
+    strcpy(FENToRead, FEN); //FIXME: Unsure about strcpy beeing safe (should be as im checking length above)
 
 
     /* Piece Placement*/
@@ -100,7 +100,7 @@ ChessGame *GetGameFromFEN(char FEN[])
     
     // Continue reading the FEN string, next will be information about the current player turn
     char *pCurrentTurnFENPart = strtok(NULL, " ");
-    if (tolower(pCurrentTurnFENPart[0]) == 'w') // Check weter the letter 'w' is represented here, in that case, its white's turn
+    if (tolower(pCurrentTurnFENPart[0]) == 'w') // Check wether the letter 'w' is represented here, in that case, its white's turn
     {
         loadedChessGameFromFEN->currentTurn = White;
     }
@@ -113,6 +113,7 @@ ChessGame *GetGameFromFEN(char FEN[])
         DeleteChessGame(&loadedChessGameFromFEN);
         return NULL;
     }
+
 
     /* Castling Rights */
     // For getting the castling rights from the FEN, we assume that the loadedChessGameFromFEN->gameCastlingRights for white and black are both set to None on default!!
