@@ -19,7 +19,7 @@ typedef struct PieceData
 typedef struct Board
 {
     Piece *piecesHashTable[64]; // A hashTable that uses the pos of a piece as key an stores the pointer to the piece as value, notice it actually stores the address of the pieces, which are first defined in the pAllPieces pointerarray
-    // This hashtable comes in handy, cuz it improves performance when checking for a piece at a boardPos //TODO: either give use or remove
+    // This hashtable comes in handy, cuz it improves performance when checking for a piece at a boardPos
     PieceData *headPieceData; // The head of the linked list storing all the data of the pieces on the board //It's best to set this to null after initializing the board, to avoid filling it with garbage, which would then make the AddPiece() not work
     PieceData *lastPieceDataStored; // The last element in the headPieceData list making it easier to add pieces to the list
 } Board;

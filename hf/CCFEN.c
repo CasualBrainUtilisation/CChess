@@ -17,7 +17,7 @@ ChessGame *GetGameFromFEN(char FEN[])
     }
 
     // For first, create an empty ChessGame-struct, this will be filled with information from the FEN string
-    ChessGame *loadedChessGameFromFEN = InitChessGame(); //TODO: create init()
+    ChessGame *loadedChessGameFromFEN = InitChessGame();
 
     // Create a new char[] copied from FEN, so we have acces to its address, and we don't care about it changing with strtok
     char FENToRead[128];
@@ -105,7 +105,7 @@ ChessGame *GetGameFromFEN(char FEN[])
     {
         loadedChessGameFromFEN->currentTurn = White;
     }
-    else if (tolower(pCurrentTurnFENPart[0]) == 'b') // Else if the letter 'b' is repreesented here, it's black's turn
+    else if (tolower(pCurrentTurnFENPart[0]) == 'b') // Else if the letter 'b' is represented here, it's black's turn
     {
         loadedChessGameFromFEN->currentTurn = Black;
     }
@@ -124,7 +124,7 @@ ChessGame *GetGameFromFEN(char FEN[])
     for (char curCastlingRightsChar = *pCastlingRightsFENPart; curCastlingRightsChar != '\0'; curCastlingRightsChar = *++pCastlingRightsFENPart)
     {
         // Depending on the current char we'll react differently
-        switch(curCastlingRightsChar)
+        switch(curCastlingRightsChar) //TODO: one could make a simple function call for most following cases, for that I'd create an AddCastlingRight() to CChessGame
         {
             // In case it's an 'Q', white can castle queenside
             case 'Q' :

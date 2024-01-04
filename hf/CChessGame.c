@@ -21,7 +21,7 @@ typedef struct GameCastlingRights
 } GameCastlingRights;
 
 
-/* Game Info */
+/* ChessGame struct */
 // Geral Info about a chess game
 typedef struct ChessGame //TODO: add gameHistory
 {
