@@ -89,8 +89,9 @@ void DeleteChessGame(ChessGame **chessGame)
     // Delete the stupid chessBoard
     DeleteChessBoard(&(*chessGame)->board);
 
-    // Set the possibleEnPassantDestinationPos pointer to NULL
-    (*chessGame)->possibleEnPassantDestinationPos = NULL;
+    // Set the possibleEnPassantDestinationPos pointer to NULL 
+    // This also frees allocated memory
+    SetNewEnPassantDestinationPos(NULL, *chessGame);
 
     // Finally free the chessGame itself
     free(*chessGame);

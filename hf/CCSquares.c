@@ -52,3 +52,14 @@ Pos *GetPosFromFieldNotation(char *fieldNotation)
     // Return the fun posToReturn
     return posToReturn;
 }
+
+// Function that sets the given fieldNotationToSet for given pos
+// Given Pos will not be checked for validity, make sure it's valid
+void GetFieldNotationFromPos(Pos *pos, char *fieldNotationToSet)
+{
+    // We're effectifly reversing what's done in GetPosFromFieldNotation() without safety checks
+    // Add 'a' to the y pos, resulting in a range from a-h
+    fieldNotationToSet[0] = pos->Y + 'a';
+    // Mirror the pos.y and change the range from 0-7 to 1-8, then convert the number to an ascii char
+    fieldNotationToSet[1] = 8 - pos->X + '0';
+}

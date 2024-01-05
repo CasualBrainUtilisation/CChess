@@ -15,4 +15,8 @@ typedef struct Vector2
 // Given strings should be null terminated
 Pos *GetPosFromFieldNotation(char *fieldNotation);
 
+// Function that sets the given fieldNotationToSet for given pos
+// Given Pos will not be checked for validity, make sure it's valid
+void GetFieldNotationFromPos(Pos *pos, char *fieldNotationToSet);
+
 #endif

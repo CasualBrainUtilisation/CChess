@@ -1,6 +1,5 @@
 #include <string.h> // for strtok ect
 #include <ctype.h> // for lowercase ect.
-#include <stdlib.h> // malloc
 
 #include "CChessGame.h"
 #include "CCPieces.h"
@@ -276,6 +275,7 @@ void ConvertGameToFEN(char FENToReturn[128], ChessGame *chessGameToConvert)
     FENToReturn[curIndex] = ' ';
     curIndex++;
 
+
     /* Current Turn */
     // Add a 'w' if the chessGameToConvert->currentTurn is White and a 'b' if it's not (meaning it's black)
     FENToReturn[curIndex] = chessGameToConvert->currentTurn == White ? 'w' : 'b'; 
@@ -287,5 +287,86 @@ void ConvertGameToFEN(char FENToReturn[128], ChessGame *chessGameToConvert)
 
 
     /* Castling Manager */
+    // If the startCastlingCurIndex doesn't change, that means that we haven't added any castling rule to the FEN, so we have to add a '-'
+    int startCastlingCurIndex = curIndex;
+
+    // Add corresponding characters foreach castlingRight
+    switch (chessGameToConvert->gameCastlingRights.whiteCastlingRights)
+    {
+        case QueenSide:
+            FENToReturn[curIndex] = 'Q';
+            curIndex++;
+            break;
+
+        case KingSide:
+            FENToReturn[curIndex] = 'K';
+            curIndex++;
+            break;
+
+        case BothSides:
+            FENToReturn[curIndex] = 'K';
+            curIndex++;
+            FENToReturn[curIndex] = 'Q';
+            curIndex++;
+            break;
+    }
+
+    switch (chessGameToConvert->gameCastlingRights.blackCastlingRights)
+    {
+        case QueenSide:
+            FENToReturn[curIndex] = 'q';
+            curIndex++;
+            break;
+
+        case KingSide:
+            FENToReturn[curIndex] = 'k';
+            curIndex++;
+            break;
+
+        case BothSides:
+            FENToReturn[curIndex] = 'k';
+            curIndex++;
+            FENToReturn[curIndex] = 'q';
+            curIndex++;
+            break;
+    }
+
+    // If the startCastlingCurIndex didn't change, that means that we haven't added any castling rule to the FEN, so we have to add a '-'
+    if (curIndex == startCastlingCurIndex)
+    {
+        FENToReturn[curIndex] = '-';
+        curIndex++;
+    }
+
+    // Skip one index here to seperate the CastleRights section from the EnPassant section of the FEN with a space (spaces are good)
+    FENToReturn[curIndex] = ' ';
+    curIndex++;
+
     
+    /* Possible En Passant Move */
+    // Check wether there actually is any possibleEnPassantDestinationPos to add here
+    if (chessGameToConvert->possibleEnPassantDestinationPos != NULL)
+    {
+        // In this array wee'll store the fieldNotationForPossibleEnPassantDestinationPos
+        // Notice that this array won't have a '\0' in the end (which we don't need)
+        char fieldNotationForPossibleEnPassantDestinationPos[2];
+        // Save the fieldNotation from the possibleEnPassantDestinationPos into fieldNotationForPossibleEnPassantDestinationPos
+        GetFieldNotationFromPos(chessGameToConvert->possibleEnPassantDestinationPos, fieldNotationForPossibleEnPassantDestinationPos);
+
+        // Add the field notation we got to FENToReturn
+        FENToReturn[curIndex] = fieldNotationForPossibleEnPassantDestinationPos[0];
+        curIndex++;
+        FENToReturn[curIndex] = fieldNotationForPossibleEnPassantDestinationPos[1];
+        curIndex++;
+    }
+    // If there is no possibleEnPassantDestinationPos just add a dash
+    else
+    {
+        FENToReturn[curIndex] = '-';
+        curIndex++;
+    }
+
+    // Skip one index here to seperate the EnPassant section from the MovesSinceCaptureOrPawnMove section of the FEN with a space (spaces are good)
+    FENToReturn[curIndex] = ' ';
+    curIndex++;
 }
