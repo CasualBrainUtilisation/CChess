@@ -115,7 +115,7 @@ ChessGame *GetGameFromFEN(char FEN[])
     }
 
 
-    /* Castling Rights */
+    /* Castling Rights */ //FIXME: RN, passing too  many castling rights will cause a segmantation fault, eg.: KKKKQQQQQKKKQKKQKQKQKQKQQKQKQKQKQKQKQKkq
     // For getting the castling rights from the FEN, we assume that the loadedChessGameFromFEN->gameCastlingRights for white and black are both set to None on default!!
 
     // Continue reading the FEN string, next will be information about the castling rights of the players
@@ -212,6 +212,8 @@ void ConvertGameToFEN(char FENToReturn[128], ChessGame *chessGameToConvert)
     // Keeps track of the index that is next to be set in the FEN
     int curIndex = 0;
 
+    /* Piece Position */
+
     // The amount of boardFields that have been checked since the last piece was added to the FEN
     int fieldsSinceLastPiece = 0;
     // Loop through the chessBoard, keeping track of y and x cords, y comes first as ranks are simply seperated by '/' while files take multiple chars
@@ -261,4 +263,16 @@ void ConvertGameToFEN(char FENToReturn[128], ChessGame *chessGameToConvert)
         FENToReturn[curIndex] = '/';
         curIndex++;
     }
+    // Skip one index here to seperate the Piece Position from the CurrentTurn section of the FEN with a space (spaces are good)
+    FENToReturn[curIndex] = ' ';
+    curIndex++;
+
+    /* Current Turn */
+    // Add a 'w' if the chessGameToConvert->currentTurn is White and a 'b' if it's not (meaning it's black)
+    FENToReturn[curIndex] = chessGameToConvert->currentTurn == White ? 'w' : 'b'; 
+    curIndex++;
+
+    // Skip one index here to seperate the CurrentTurn section from the CastleRights section of the FEN with a space (spaces are good)
+    FENToReturn[curIndex] = ' ';
+    curIndex++;
 }
