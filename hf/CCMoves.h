@@ -27,5 +27,7 @@ typedef struct Move
     enum MoveType moveType; // The type of this move
 } Move;
 
+// This struct is used to represent the direction of a move
+typedef struct Vector2 MoveDir;
 
 #endif

@@ -7,24 +7,20 @@
 
 int main()
 {
-    ChessGame *chessGame = GetGameFromFEN("rnbqkbnr/1p1p1ppp/8/pPp1p3/4P3/8/P1PP1PPP/RNBQKBNR/ w kqQK a6 11 4");
+    ChessGame *chessGame = GetGameFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
     if(chessGame == NULL) printf("now i have to cry \n");
 
     PrintBoard(chessGame->board);
 
-    printf("%d \n", chessGame->currentTurn);
+    Pos pos = {7, 6};
+    Piece *piece = GetPieceAtPos(pos, chessGame->board);
 
-    printf("%d \n", chessGame->gameCastlingRights.whiteCastlingRights);
-    printf("%d \n", chessGame->gameCastlingRights.blackCastlingRights);
+    Move *moves = GetAllMovesForPiece(piece, chessGame->board);
+    PerformMove(moves[0], chessGame->board);
 
-    if (chessGame->possibleEnPassantDestinationPos != NULL) printf("(%d|%d) \n", chessGame->possibleEnPassantDestinationPos->X, chessGame->possibleEnPassantDestinationPos->Y);
+    PrintBoard(chessGame->board);
 
-    printf("%d \n", chessGame->playedHalfMoves);
-    printf("%d \n", chessGame->nextMoveNumber);
-
-    char FEN[128] = {0};
-    ConvertGameToFEN(FEN, chessGame);
-    printf("%s", FEN);
+    
 
     DeleteChessBoard(&chessGame->board);
 

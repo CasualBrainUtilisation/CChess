@@ -56,4 +56,7 @@ void D_PrintPiece(Piece *piece, char name[]);
 // Performs given move on given board
 void PerformMove(Move moveToPerform, Board *board);
 
+// Gives back all the possible moves for given piece
+Move *GetAllMovesForPiece(Piece *piece, Board *board);
+
 #endif

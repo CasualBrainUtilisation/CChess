@@ -1,6 +1,7 @@
 #include <string.h> // for strtok + strtol ect.
 #include <ctype.h> // for lowercase ect.
 #include <stdio.h> // for sprintf
+#include <errno.h> // for well errno
 
 #include "CChessGame.h"
 #include "CCPieces.h"
@@ -215,7 +216,7 @@ ChessGame *GetGameFromFEN(char FEN[])
     return loadedChessGameFromFEN;
 }
 
-// Converts the given ChessGame to a FEN string literal and sets the FENToChange to it (wow such gorgeus function!)
+// Converts the given ChessGame to a FEN string array and sets the given FENToChange to it (wow such gorgeus function!)
 void ConvertGameToFEN(char FENToReturn[128], ChessGame *chessGameToConvert)
 {
     // Keeps track of the index that is next to be set in the FEN

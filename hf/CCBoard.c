@@ -265,3 +265,66 @@ void PerformMove(Move *moveToPerform, Board *board)
     // Now update its pos in the piecesHashTable
     updatePiecePosInHashTable(moveToPerform->PieceToMove, oldPos, board);
 }
+
+// Returns all the moves avaible for given piece on given board on line with given MoveDir
+Move *getLineMoves(MoveDir moveDir, Piece *pieceToGetMovesFor, Board *board)
+{
+    Move *moveList = NULL;
+
+    // Loop through given line starting from the piece pos
+    for (   int i = 0, // Set i (index) to 0
+            x = pieceToGetMovesFor->pos.X + moveDir.X, // Make sure we start not at the start x but already go one step in the moveDir (else we'll check for a move from the starting to the starting square)
+            y = pieceToGetMovesFor->pos.Y + moveDir.Y; // Make sure we start not at the start y but already go one step in the moveDir (else we'll check for a move from the starting to the starting square)
+            x <= 7 && x >= 0 && y <= 7 && y >= 0;  // Check wether either x or y on the board to run this for loop
+            x += moveDir.X, y += moveDir.Y, i++) // Go further in the moveDir (also incre i)
+    {
+        // Get the pos at the current index in the loop
+        Pos curPos = {x, y};
+        // Get the piece at the current Pos
+        Piece *pieceAtCurPos = GetPieceAtPos(curPos, board);
+        // Create the move from the pieceToGetMovesFor to the curPos
+        Move curMove = {pieceToGetMovesFor->pos, curPos, pieceToGetMovesFor, NULL};
+        // Check wether there actually is a piece at the currentPosition
+        if (pieceAtCurPos != NULL)
+        {
+            // Check wether the pieceAtCurPos has a different color then the pieceToGetMovesFor, if so, add this move and set the pieceToCapture to the pieceAtCurPos, as it can be captured
+            if (pieceAtCurPos->pieceColor != pieceToGetMovesFor->pieceColor)
+            {
+                curMove.PieceToCapture = pieceAtCurPos;
+                moveList = realloc(moveList, sizeof(Move) * (i + 1));
+                moveList[i] = curMove;
+            }
+            // As there is a piece here, we can't go further into this direction, so break;
+            break;
+        }
+
+        // Add the curMove to the moveList
+        moveList = realloc(moveList, sizeof(Move) * (i + 1));
+        moveList[i] = curMove;
+    }
+
+    return moveList;
+}
+
+// Gives back all the possible moves for given piece
+Move *GetAllMovesForPiece(Piece *piece, Board *board)
+{
+    // Obviously depending on type, move generation will work completly different for different pieces
+    switch (piece->pieceType)
+    {
+        case Pawn:
+            break;
+
+        case Knight:
+            break;
+
+        case Bishop:
+            break;
+
+        case Queen:
+            break;
+        
+        case King:
+            break;
+    }
+}
