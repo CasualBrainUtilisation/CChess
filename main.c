@@ -22,6 +22,10 @@ int main()
     printf("%d \n", chessGame->playedHalfMoves);
     printf("%d \n", chessGame->nextMoveNumber);
 
+    char FEN[128] = {0};
+    ConvertGameToFEN(FEN, chessGame);
+    printf("%s", FEN);
+
     DeleteChessBoard(&chessGame->board);
 
     return 0;

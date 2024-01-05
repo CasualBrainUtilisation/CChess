@@ -40,6 +40,9 @@ typedef struct ChessGame //TODO: add gameHistory
 // Function that should always be called to initialize a chessGame as it sets up some things needed for the board to function expectedly (mainly zeroing and malloc())
 ChessGame *InitChessGame();
 
+// Simple function to set a new EnPassantDestinationPos, it frees the previous pos if there was one
+void SetNewEnPassantDestinationPos(Pos *newPossibleEnPassantDestinationPos, ChessGame *chessGame);
+
 // This function will free every part of given chessGame freeing is required for aka everything malloc() was used for
 void DeleteChessGame(ChessGame **chessGame);
 

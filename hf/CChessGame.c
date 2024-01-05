@@ -62,6 +62,15 @@ ChessGame *InitChessGame()
     return chessGame; 
 }
 
+// Simple function to set a new EnPassantDestinationPos, it frees the previous pos if there was one
+void SetNewEnPassantDestinationPos(Pos *newPossibleEnPassantDestinationPos, ChessGame *chessGame)
+{
+    // Check wether there is a pos already stored in possibleEnPassantDestinationPos, if so free it
+    if (chessGame->possibleEnPassantDestinationPos != NULL) free(chessGame->possibleEnPassantDestinationPos);
+    // Set the possibleEnPassantDestinationPos to the new newPossibleEnPassantDestinationPos
+    chessGame->possibleEnPassantDestinationPos = newPossibleEnPassantDestinationPos;
+}
+
 // This function will free every part of given chessGame freeing is required for aka everything malloc() was used for
 void DeleteChessGame(ChessGame **chessGame)
 {
