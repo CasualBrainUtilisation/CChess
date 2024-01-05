@@ -124,27 +124,43 @@ ChessGame *GetGameFromFEN(char FEN[])
     for (char curCastlingRightsChar = *pCastlingRightsFENPart; curCastlingRightsChar != '\0'; curCastlingRightsChar = *++pCastlingRightsFENPart)
     {
         // Depending on the current char we'll react differently
-        switch(curCastlingRightsChar) //TODO: one could make a simple function call for most following cases, for that I'd create an AddCastlingRight() to CChessGame
+        switch(curCastlingRightsChar)
         {
             // In case it's an 'Q', white can castle queenside
             case 'Q' :
-                // So add QueenSideRights for white
-                loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights += QueenSide;
+                // So add QueenSideRights for white, on fail remove allocated mem and return NULL
+                if (AddCastlingRight(QueenSide, &loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights) == 1)
+                {
+                    DeleteChessGame(&loadedChessGameFromFEN);
+                    return NULL;
+                }
                 break;
             // In case it's an 'K', white can castle kingside
             case 'K' :
                 // So add KingSideRights for white
-                loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights += KingSide;
+                if (AddCastlingRight(KingSide, &loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights) == 1)
+                {
+                    DeleteChessGame(&loadedChessGameFromFEN);
+                    return NULL;
+                }
                 break;
             // In case it's an 'q', black can castle queenside
             case 'q' :
                 // So add QueenSideRights for black
-                loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights += QueenSide;
+                if (AddCastlingRight(QueenSide, &loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights) == 1)
+                {
+                    DeleteChessGame(&loadedChessGameFromFEN);
+                    return NULL;
+                }
                 break;
             // In case it's an 'k', black can castle kingside
             case 'k' :
                 // So add KingSideRights for black
-                loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights += KingSide;
+                if (AddCastlingRight(KingSide, &loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights) == 1)
+                {
+                    DeleteChessGame(&loadedChessGameFromFEN);
+                    return NULL;
+                }
                 break;
             // A '-' indicates that no castling rights are to be set, so just leave them at the default NONE
             case '-' :
@@ -155,13 +171,6 @@ ChessGame *GetGameFromFEN(char FEN[])
                 return NULL;
         }
     }
-    // Now check wether the gameCastlingRights actually have a valid value (they may not if certain character ('q'/'k') have been included multiple times in the pCastlingRightsFENPart)
-    if (loadedChessGameFromFEN->gameCastlingRights.whiteCastlingRights > 3 || loadedChessGameFromFEN->gameCastlingRights.blackCastlingRights > 3)
-    {
-        DeleteChessGame(&loadedChessGameFromFEN);
-        return NULL;
-    }
-
 
     /* En Passant */
     // Continue reading the FEN string, next will be the possible En Passant move
@@ -275,4 +284,8 @@ void ConvertGameToFEN(char FENToReturn[128], ChessGame *chessGameToConvert)
     // Skip one index here to seperate the CurrentTurn section from the CastleRights section of the FEN with a space (spaces are good)
     FENToReturn[curIndex] = ' ';
     curIndex++;
+
+
+    /* Castling Manager */
+    
 }

@@ -62,6 +62,18 @@ ChessGame *InitChessGame()
     return chessGame; 
 }
 
+// Simple function to add given castlingRightToAdd to given castlingRightToAddTo enum, returns 1 on given castling right beeing invalid to add, 0 on sucess
+int AddCastlingRight(CastlingRights castlingRightToAdd, CastlingRights *castlingRightToAddTo)
+{
+    // U can't add the castlingRight None, neither can you add one over 3 (which is the limit of the castlingRight enum), so return 1 if that is tried here
+    if (castlingRightToAdd == None || castlingRightToAdd > 3) return 1;
+    // Return 1 if the castlingRight already has been added
+    if (castlingRightToAdd == *castlingRightToAddTo || *castlingRightToAddTo == BothSides) return 1;
+
+    // In case adding given castlingRight is possible, do so, the way the enum works, you can just mathematcally do so
+    *castlingRightToAddTo += castlingRightToAdd;
+}
+
 // Simple function to set a new EnPassantDestinationPos, it frees the previous pos if there was one
 void SetNewEnPassantDestinationPos(Pos *newPossibleEnPassantDestinationPos, ChessGame *chessGame)
 {

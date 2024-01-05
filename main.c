@@ -7,7 +7,7 @@
 
 int main()
 {
-    ChessGame *chessGame = GetGameFromFEN("rnbqkbnr/1p1p1ppp/8/pPp1p3/4P3/8/P1PP1PPP/RNBQKBNR w KQkq a6 0 4");
+    ChessGame *chessGame = GetGameFromFEN("rnbqkbnr/1p1p1ppp/8/pPp1p3/4P3/8/P1PP1PPP/RNBQKBNR w kqKQ a6 0 4");
     if(chessGame == NULL) printf("now i have to cry \n");
 
     PrintBoard(chessGame->board);

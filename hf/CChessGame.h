@@ -40,6 +40,9 @@ typedef struct ChessGame //TODO: add gameHistory
 // Function that should always be called to initialize a chessGame as it sets up some things needed for the board to function expectedly (mainly zeroing and malloc())
 ChessGame *InitChessGame();
 
+// Simple function to add given castlingRightToAdd to given castlingRightToAddTo enum, returns 1 on given castling right beeing invalid to add, 0 on sucess
+int AddCastlingRight(CastlingRights castlingRightToAdd, CastlingRights *castlingRightToAddTo);
+
 // Simple function to set a new EnPassantDestinationPos, it frees the previous pos if there was one
 void SetNewEnPassantDestinationPos(Pos *newPossibleEnPassantDestinationPos, ChessGame *chessGame);
 
