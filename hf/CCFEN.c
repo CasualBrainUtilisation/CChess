@@ -1,5 +1,6 @@
-#include <string.h> // for strtok ect
+#include <string.h> // for strtok + strtol ect.
 #include <ctype.h> // for lowercase ect.
+#include <stdio.h> // for sprintf
 
 #include "CChessGame.h"
 #include "CCPieces.h"
@@ -366,7 +367,39 @@ void ConvertGameToFEN(char FENToReturn[128], ChessGame *chessGameToConvert)
         curIndex++;
     }
 
-    // Skip one index here to seperate the EnPassant section from the MovesSinceCaptureOrPawnMove section of the FEN with a space (spaces are good)
+    // Skip one index here to seperate the EnPassant section from the HalfMovesSinceCaptureOrPawnMove section of the FEN with a space (spaces are good)
     FENToReturn[curIndex] = ' ';
     curIndex++;
+
+
+    /* HalfMovesSinceCaptureOrPawnMove */
+
+    // The number (HalfMovesSinceCaptureOrPawnMove) that is to be added to the FENToReturn will be stored in here as string
+    char halfMoveNumberToAddAsString[8];
+    sprintf(halfMoveNumberToAddAsString, "%d", chessGameToConvert->playedHalfMoves);
+
+    // Add each char of the halfMoveNumberToAddAsString to the FEN
+    for (int i = 0; halfMoveNumberToAddAsString[i] != '\0'; i++)
+    {
+        FENToReturn[curIndex] = halfMoveNumberToAddAsString[i];
+        curIndex++;
+    }
+
+    // Skip one index here to seperate the HalfMovesSinceCaptureOrPawnMove section from the nextMoveNumber section of the FEN with a space (spaces are good)
+    FENToReturn[curIndex] = ' ';
+    curIndex++;
+
+
+    /* NextMoveNumber */
+
+    // The number (HalfMovesSinceCaptureOrPawnMove) that is to be added to the FENToReturn will be stored in here as string
+    char nextMoveNumberToAddAsString[8];
+    sprintf(nextMoveNumberToAddAsString, "%d", chessGameToConvert->nextMoveNumber);
+
+    // Add each char of the nextMoveNumberToAddAsString to the FEN
+    for (int i = 0; nextMoveNumberToAddAsString[i] != '\0'; i++)
+    {
+        FENToReturn[curIndex] = nextMoveNumberToAddAsString[i];
+        curIndex++;
+    }
 }
