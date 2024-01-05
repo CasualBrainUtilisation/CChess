@@ -115,7 +115,7 @@ ChessGame *GetGameFromFEN(char FEN[])
     }
 
 
-    /* Castling Rights */ //FIXME: RN, passing too  many castling rights will cause a segmantation fault, eg.: KKKKQQQQQKKKQKKQKQKQKQKQQKQKQKQKQKQKQKkq
+    /* Castling Rights */
     // For getting the castling rights from the FEN, we assume that the loadedChessGameFromFEN->gameCastlingRights for white and black are both set to None on default!!
 
     // Continue reading the FEN string, next will be information about the castling rights of the players
