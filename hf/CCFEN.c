@@ -165,10 +165,10 @@ ChessGame *GetGameFromFEN(char FEN[])
             // A '-' indicates that no castling rights are to be set, so just leave them at the default NONE
             case '-' :
                 break;
-            // If there is any other character here, the FEN is invalid, so free allocated mem and return NULL
-            default :
-                DeleteChessGame(&loadedChessGameFromFEN);
-                return NULL;
+            // If there is any other character here, the FEN is invalid, so free allocated mem and return NULL //TODO: decide wether to actually do this or wether to just ignore cases like this
+            // default :
+            //     DeleteChessGame(&loadedChessGameFromFEN);
+            //     return NULL;
         }
     }
 
@@ -375,7 +375,7 @@ void ConvertGameToFEN(char FENToReturn[128], ChessGame *chessGameToConvert)
     /* HalfMovesSinceCaptureOrPawnMove */
 
     // The number (HalfMovesSinceCaptureOrPawnMove) that is to be added to the FENToReturn will be stored in here as string
-    char halfMoveNumberToAddAsString[8];
+    char halfMoveNumberToAddAsString[16];
     sprintf(halfMoveNumberToAddAsString, "%d", chessGameToConvert->playedHalfMoves);
 
     // Add each char of the halfMoveNumberToAddAsString to the FEN
@@ -393,7 +393,7 @@ void ConvertGameToFEN(char FENToReturn[128], ChessGame *chessGameToConvert)
     /* NextMoveNumber */
 
     // The number (HalfMovesSinceCaptureOrPawnMove) that is to be added to the FENToReturn will be stored in here as string
-    char nextMoveNumberToAddAsString[8];
+    char nextMoveNumberToAddAsString[16];
     sprintf(nextMoveNumberToAddAsString, "%d", chessGameToConvert->nextMoveNumber);
 
     // Add each char of the nextMoveNumberToAddAsString to the FEN
