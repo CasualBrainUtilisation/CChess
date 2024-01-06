@@ -266,10 +266,95 @@ void PerformMove(Move *moveToPerform, Board *board)
     updatePiecePosInHashTable(moveToPerform->PieceToMove, oldPos, board);
 }
 
-// Returns all the moves avaible for given piece on given board on line with given MoveDir
-Move *getLineMoves(MoveDir moveDir, Piece *pieceToGetMovesFor, Board *board)
+
+/* Getting Moves */
+
+// For storing moves, we'll need a linked list (as we are gonna add to our list constantly in the getMoves() functions)
+// The elements in the linked list
+typedef struct MoveData
 {
-    Move *moveList = NULL;
+    Move data; // Data stored in an element
+    struct MoveData *Next; // The next element in the linked list
+} MoveData;
+
+//Kepps track of created linked list
+typedef struct MoveDataLinkedList
+{
+    MoveData *Head; // The head of the MoveData linked list (aka first element)
+    MoveData *LastElement; // The last element of the moveData linked list, which is kept track of to easily add to the list
+
+    size_t listSize; // Keeps track of the size of the list
+} MoveDataLinkedList;
+
+// Function that should be used to intialize a MoveDataLinkedList (makes sure pointers are NULL)
+MoveDataLinkedList *initMoveDataLinkedList()
+{
+    MoveDataLinkedList *newList = malloc(sizeof(MoveDataLinkedList));
+
+    newList->Head = NULL;
+    newList->LastElement = NULL;
+
+    newList->listSize = 0;
+
+    return newList;
+}
+
+// add a given move to the moveDataList
+void addMoveToMoveDataLinkedList(Move moveToAdd, MoveDataLinkedList *moveDataLinkedList)
+{
+    // Create the newMoveData
+    MoveData *newMoveData = malloc(sizeof(MoveData));
+    // Fill the moveToAdd given to this function
+    newMoveData->data = moveToAdd;
+    // Set the Next to null, as this element will be the last one on the linked list
+    newMoveData->Next = NULL;
+
+    if (moveDataLinkedList->Head == NULL) // If the linked MoveData list is currently empty (which it is if the head is null), make this newMoveData be the first element 
+    {
+        moveDataLinkedList->Head = newMoveData;
+        moveDataLinkedList->LastElement = moveDataLinkedList->Head;
+    }
+    else // In case there already are elements in the moveDataList
+    {
+        // Make the previous last element point to this new one
+        moveDataLinkedList->LastElement->Next = newMoveData;
+        // Store the new element in the lastPieceDataStored pointer
+        moveDataLinkedList->LastElement = newMoveData;
+    }
+
+    // Also increase the listSize variable, as we just increased the size
+    moveDataLinkedList->listSize++;
+}
+
+// Merges to moveDataLinkedList in given order
+// The list should then be referenced by the headList
+void mergeMoveDataLinkedList(MoveDataLinkedList *headList, MoveDataLinkedList *finalList)
+{
+    // In case the finalList is empty there is nothing to merge here
+    if (finalList == NULL)
+    {
+        return;
+    }
+    // In case the headList is empty, make it point to the finalList
+    else if (headList->Head == NULL)
+    {
+        headList->Head = finalList->Head;
+        headList->LastElement = finalList->LastElement;
+    }
+    // In any other cases simply make the lastElement in the headList point to the first (head) in the finalList
+    else
+    {
+        headList->LastElement->Next = finalList->Head;
+    }
+    
+    // Also add the listSizes together
+    headList->listSize += finalList->listSize;
+}
+
+// Returns all the moves avaible for given piece on given board on line with given MoveDir
+MoveDataLinkedList *getLineMoves(MoveDir moveDir, Piece *pieceToGetMovesFor, Board *board)
+{
+    MoveDataLinkedList *moveList = initMoveDataLinkedList();
 
     // Loop through given line starting from the piece pos
     for (   int i = 0, // Set i (index) to 0
@@ -291,26 +376,27 @@ Move *getLineMoves(MoveDir moveDir, Piece *pieceToGetMovesFor, Board *board)
             if (pieceAtCurPos->pieceColor != pieceToGetMovesFor->pieceColor)
             {
                 curMove.PieceToCapture = pieceAtCurPos;
-                moveList = realloc(moveList, sizeof(Move) * (i + 1));
-                moveList[i] = curMove;
+                addMoveToMoveDataLinkedList(curMove, moveList);
             }
             // As there is a piece here, we can't go further into this direction, so break;
             break;
         }
 
         // Add the curMove to the moveList
-        moveList = realloc(moveList, sizeof(Move) * (i + 1));
-        moveList[i] = curMove;
+        addMoveToMoveDataLinkedList(curMove, moveList);
     }
 
     return moveList;
 }
 
 // Gives back all the possible moves for given piece
-Move *GetAllMovesForPiece(Piece *piece, Board *board)
+Move *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board)
 {
+    // List to keep track of all the moves we get throughout this function
+    MoveDataLinkedList *moveList = initMoveDataLinkedList();
+
     // Obviously depending on type, move generation will work completly different for different pieces
-    switch (piece->pieceType)
+    switch (pieceToGetMovesFor->pieceType)
     {
         case Pawn:
             break;
@@ -322,9 +408,33 @@ Move *GetAllMovesForPiece(Piece *piece, Board *board)
             break;
 
         case Queen:
+
+            MoveDir moveDirs[] = {{1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}, {0,-1}, {1,-1}};
+
+            for (int i = 0; i < 8; i++)
+            {
+                mergeMoveDataLinkedList(moveList, getLineMoves(moveDirs[i], pieceToGetMovesFor, board));
+            }
+
             break;
         
         case King:
             break;
     }
+
+    // If we didn't find any moves we'll return this information (NULL)
+    if (moveList->listSize == 0) return NULL;
+
+    // Array that'll finally be returned containing all possible moves we get throughout this function
+    Move *movesToReturn = malloc(sizeof(Move) * moveList->listSize);
+
+    int i = 0;
+    for (MoveData *moveData = moveList->Head; moveData != NULL; moveData = moveData->Next)
+    {
+        movesToReturn[i] = moveData->data;
+
+        i++;
+    }
+
+    return movesToReturn; //TODO: THIS IS PRETTY IMPORTANT, free the moveList content
 }
