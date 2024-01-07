@@ -277,7 +277,7 @@ typedef struct MoveData
     struct MoveData *Next; // The next element in the linked list
 } MoveData;
 
-//Kepps track of created linked list
+//Kepps track of created move data linked list
 typedef struct MoveDataLinkedList
 {
     MoveData *Head; // The head of the MoveData linked list (aka first element)
@@ -349,6 +349,24 @@ void mergeMoveDataLinkedList(MoveDataLinkedList *headList, MoveDataLinkedList *f
     
     // Also add the listSizes together
     headList->listSize += finalList->listSize;
+}
+
+// Deletes given moveDataLinkedList alongside freeing everything in there that we mallocated
+void deleteMoveDataLinkedList(MoveDataLinkedList **moveDataLinkedListToDelete)
+{
+    // Simply loop through the moveDataLinked list and free every element (while storing the next element in nextMoveDataToDelete)
+    for (MoveData *moveDataToDelete = (*moveDataLinkedListToDelete)->Head, *nextMoveDataToDelete = NULL; moveDataToDelete != NULL; moveDataToDelete = nextMoveDataToDelete)
+    {
+        // We set the nextMoveDataToDelete after the for params, as else we would also set it to moveDataToDelete->Next when moveDataToDelete is actually NULL (we need to check moveDataToDelete for beeing NULL first)
+        nextMoveDataToDelete = moveDataToDelete->Next;
+
+        free(moveDataToDelete);
+        moveDataToDelete = NULL;
+    }
+
+    // Also free the moveDataLinkedListToDelete itself and make it point to NULL
+    free(*moveDataLinkedListToDelete);
+    *moveDataLinkedListToDelete = NULL;
 }
 
 // Returns all the moves avaible for given piece on given board on line with given MoveDir
@@ -428,6 +446,7 @@ Move *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board)
     // Array that'll finally be returned containing all possible moves we get throughout this function
     Move *movesToReturn = malloc(sizeof(Move) * moveList->listSize);
 
+    // Fill the content of the moveList (linked list) into the movesToReturn array
     int i = 0;
     for (MoveData *moveData = moveList->Head; moveData != NULL; moveData = moveData->Next)
     {
@@ -436,5 +455,8 @@ Move *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board)
         i++;
     }
 
-    return movesToReturn; //TODO: THIS IS PRETTY IMPORTANT, free the moveList content
+    // Now free the allocated moveList mem
+    deleteMoveDataLinkedList(&moveList);
+
+    return movesToReturn;
 }
