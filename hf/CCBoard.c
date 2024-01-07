@@ -351,8 +351,9 @@ void mergeMoveDataLinkedList(MoveDataLinkedList *headList, MoveDataLinkedList *f
     headList->listSize += finalList->listSize;
 }
 
-// Deletes given moveDataLinkedList alongside freeing everything in there that we mallocated
-void deleteMoveDataLinkedList(MoveDataLinkedList **moveDataLinkedListToDelete)
+// Deletes given moveDataLinkedList data alongside freeing everything in there that we mallocated
+// Must be called to delete any MoveDataLinkedList (aslong as you actually wanna avoid memory leaks that is)
+void DeleteMoveDataLinkedList(MoveDataLinkedList **moveDataLinkedListToDelete)
 {
     // Simply loop through the moveDataLinked list and free every element (while storing the next element in nextMoveDataToDelete)
     for (MoveData *moveDataToDelete = (*moveDataLinkedListToDelete)->Head, *nextMoveDataToDelete = NULL; moveDataToDelete != NULL; moveDataToDelete = nextMoveDataToDelete)
@@ -408,7 +409,7 @@ MoveDataLinkedList *getLineMoves(MoveDir moveDir, Piece *pieceToGetMovesFor, Boa
 }
 
 // Gives back all the possible moves for given piece
-Move *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board)
+MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board)
 {
     // List to keep track of all the moves we get throughout this function
     MoveDataLinkedList *moveList = initMoveDataLinkedList();
@@ -423,17 +424,44 @@ Move *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board)
             break;
 
         case Bishop:
+
+            // The bishop can move in diagonal directions, so this is just a list of that, every diagonal direction, we'll loop through to get the moves for each dir
+            MoveDir diagonalMoveDirs[] = {{1,1}, {-1,1}, {-1,-1}, {1,-1}};
+
+            // Loop through all the moveDirs and get according lineMoves
+            for (int i = 0; i < 4; i++)
+            {
+                // Add the line moves of the current moveDir to the moveList
+                mergeMoveDataLinkedList(moveList, getLineMoves(diagonalMoveDirs[i], pieceToGetMovesFor, board));
+            }
+
+
+            break;
+
+        case Rook:
+
+            // The Rook can move in straight directions, so this is just a list of that, every straight direction, we'll loop through to get the moves for each dir
+            MoveDir straightMoveDir[] = {{0,1}, {1,0}, {-1,0}, {0,-1}};
+
+            // Loop through all the moveDirs and get according lineMoves
+            for (int i = 0; i < 4; i++)
+            {
+                // Add the line moves of the current moveDir to the moveList
+                mergeMoveDataLinkedList(moveList, getLineMoves(straightMoveDir[i], pieceToGetMovesFor, board));
+            }
+
             break;
 
         case Queen:
 
-            // The Queen can move into every direction, so this is just a list of that, every direction, we'll loop through it to get the moves for each dir
-            MoveDir moveDirs[] = {{1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}, {0,-1}, {1,-1}};
+            // The Queen can move into every direction, so this is just a list of that, every direction, we'll loop through to get the moves for each dir
+            MoveDir QueenMoveDirs[] = {{1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}, {0,-1}, {1,-1}};
 
+            // Loop through all the moveDirs and get according lineMoves
             for (int i = 0; i < 8; i++)
             {
-                // Add the line moves of the current moveDir
-                mergeMoveDataLinkedList(moveList, getLineMoves(moveDirs[i], pieceToGetMovesFor, board));
+                // Add the line moves of the current moveDir to the moveList
+                mergeMoveDataLinkedList(moveList, getLineMoves(QueenMoveDirs[i], pieceToGetMovesFor, board));
             }
 
             break;
@@ -445,20 +473,6 @@ Move *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board)
     // If we didn't find any moves we'll return this information (NULL)
     if (moveList->listSize == 0) return NULL;
 
-    // Array that'll finally be returned containing all possible moves we get throughout this function
-    Move *movesToReturn = malloc(sizeof(Move) * moveList->listSize);
-
-    // Fill the content of the moveList (linked list) into the movesToReturn array
-    int i = 0;
-    for (MoveData *moveData = moveList->Head; moveData != NULL; moveData = moveData->Next)
-    {
-        movesToReturn[i] = moveData->data;
-
-        i++;
-    }
-
-    // Now free the allocated moveList mem
-    deleteMoveDataLinkedList(&moveList);
-
-    return movesToReturn;
+    // Else just return the moves we found
+    return moveList;
 }
