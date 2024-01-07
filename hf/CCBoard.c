@@ -375,11 +375,11 @@ MoveDataLinkedList *getLineMoves(MoveDir moveDir, Piece *pieceToGetMovesFor, Boa
     MoveDataLinkedList *moveList = initMoveDataLinkedList();
 
     // Loop through given line starting from the piece pos
-    for (   int i = 0, // Set i (index) to 0
+    for (   int
             x = pieceToGetMovesFor->pos.X + moveDir.X, // Make sure we start not at the start x but already go one step in the moveDir (else we'll check for a move from the starting to the starting square)
             y = pieceToGetMovesFor->pos.Y + moveDir.Y; // Make sure we start not at the start y but already go one step in the moveDir (else we'll check for a move from the starting to the starting square)
-            x <= 7 && x >= 0 && y <= 7 && y >= 0;  // Check wether either x or y on the board to run this for loop
-            x += moveDir.X, y += moveDir.Y, i++) // Go further in the moveDir (also incre i)
+            x <= 7 && x >= 0 && y <= 7 && y >= 0;  // Check wether x and y are on the board to run this for loop
+            x += moveDir.X, y += moveDir.Y) // Go further in the moveDir
     {
         // Get the pos at the current index in the loop
         Pos curPos = {x, y};
@@ -427,10 +427,12 @@ Move *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board)
 
         case Queen:
 
+            // The Queen can move into every direction, so this is just a list of that, every direction, we'll loop through it to get the moves for each dir
             MoveDir moveDirs[] = {{1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}, {0,-1}, {1,-1}};
 
             for (int i = 0; i < 8; i++)
             {
+                // Add the line moves of the current moveDir
                 mergeMoveDataLinkedList(moveList, getLineMoves(moveDirs[i], pieceToGetMovesFor, board));
             }
 
