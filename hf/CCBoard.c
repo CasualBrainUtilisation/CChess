@@ -457,7 +457,7 @@ MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board)
     {
         case Pawn:
 
-            // Get the Direction on y this pawn can move this is either up or down depending on color (notice that yes -1 does actually represent up)
+            // Get the Direction on y this pawn can move to, this is either up or down depending on color (notice that yes -1 does actually represent up)
             int yDir = pieceToGetMovesFor->pieceColor == White ? -1 : 1;
 
 
@@ -501,6 +501,36 @@ MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board)
                         moveList);
                 }
             }
+
+
+            /* Normal Pawn Moves (1/2 forward) */
+
+            // Get the pos in the yDir of the pawn, this would be the destination pos of a normal single PawnMove
+            Pos singlePawnMoveDestinationPos = {pieceToGetMovesFor->pos.X, pieceToGetMovesFor->pos.Y + yDir};
+
+            // Check wether there is not a piece at the singlePawnMoveDestinationPos, if so this move is valid, so add it and check wether a doublePawnMove may be performable
+            if (GetPieceAtPos(singlePawnMoveDestinationPos, board) == NULL)
+            {
+                addMoveToMoveDataLinkedList(
+                        (Move){pieceToGetMovesFor->pos, singlePawnMoveDestinationPos, pieceToGetMovesFor, NULL, Default},
+                        moveList);
+
+                // Check wether the pawn still is on its starting square, if so, given a singlePawnMove move would be possible, maybe a doublePawnMove also could be
+                if (pieceToGetMovesFor->pos.Y = pieceToGetMovesFor->pieceColor == White ? 6 : 1)
+                {
+                    // So get the pos 2 two ahead of the pawn (on the yDir), which would be the destanation of a doublePawnMove
+                    Pos doublePawnMoveDestinationPos = {pieceToGetMovesFor->pos.X, pieceToGetMovesFor->pos.Y + yDir * 2};
+
+                    // Now check wether there is a piece at this pos, and if there ain't, add the double forwardPawnMove as it's valid
+                    if (GetPieceAtPos(doublePawnMoveDestinationPos, board) == NULL)
+                    {
+                        addMoveToMoveDataLinkedList(
+                            (Move){pieceToGetMovesFor->pos, doublePawnMoveDestinationPos, pieceToGetMovesFor, NULL, DoublePawnMove}, // Notice that the moveType is a DoublePawnMove for this move
+                            moveList);
+                    }
+                }
+            }
+
 
             break;
 
