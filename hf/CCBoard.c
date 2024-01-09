@@ -460,7 +460,11 @@ MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board)
 
         case Knight:
 
+            // The Knight can offset into some fun L-directions, here we get these possible offsets into a simple list
+            MoveDir KnightMoveOffsets[] = {{1,2}, {-1,2}, {2,1}, {-2,1}, {2,-1}, {-2,-1}, {-1,-2}, {1,-2}};
 
+            // Now we check this offsets for representing valid moves, as checkMoveOffsetsForValidity() returns these valid moves, we simpoly merge them to the moveList
+            mergeMoveDataLinkedList(moveList, checkMoveOffsetsForValidity(KnightMoveOffsets, sizeof(KnightMoveOffsets)/(sizeof(KnightMoveOffsets[0])), pieceToGetMovesFor, board));
 
             break;
 
@@ -507,7 +511,7 @@ MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board)
 
             break;
         
-        case King:
+        case King: //TODO: castling
 
             // The King can offset into every direction, here we get these possible offsets into a simple list
             MoveDir KingMoveOffsets[] = {{1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}, {0,-1}, {1,-1}};
