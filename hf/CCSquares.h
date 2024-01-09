@@ -11,6 +11,10 @@ typedef struct Vector2
     int Y; // The Y represents the ranks of the ChessBoard (The letters a - h (with 0-7))
 } Pos;
 
+// Checks wether given position is on the valid range of a chessBoard (meaning both x and y would have to be in a range from 0-7)
+int IsPosOnBoard(Pos pos);
+
+
 // Function that returns a Pos pointer, from given FieldNotation (e.g.: e4, h1 ...), returns NULL if the FieldNotation is invalid
 // Given strings should be null terminated
 Pos *GetPosFromFieldNotation(char *fieldNotation);

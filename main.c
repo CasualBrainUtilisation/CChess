@@ -13,7 +13,7 @@ int main()
     PrintBoard(chessGame->board);
     printf("\n");
 
-    Pos pos = {1, 7};
+    Pos pos = {3, 6};
     Piece *piece = GetPieceAtPos(pos, chessGame->board);
 
     MoveDataLinkedList *moves = GetAllMovesForPiece(piece, chessGame->board);

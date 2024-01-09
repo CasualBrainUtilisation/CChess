@@ -63,3 +63,9 @@ void GetFieldNotationFromPos(Pos *pos, char *fieldNotationToSet)
     // Mirror the pos.y and change the range from 0-7 to 1-8, then convert the number to an ascii char
     fieldNotationToSet[1] = 8 - pos->X + '0';
 }
+
+// Checks wether given position is on the valid range of a chessBoard (meaning both x and y would have to be in a range from 0-7)
+int IsPosOnBoard(Pos pos)
+{
+    return pos.X >= 0 && pos.X <= 7 && pos.Y >= 0 && pos.Y <= 7;
+}

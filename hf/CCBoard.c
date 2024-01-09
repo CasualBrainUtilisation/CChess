@@ -382,7 +382,7 @@ MoveDataLinkedList *getLineMoves(MoveDir moveDir, Piece *pieceToGetMovesFor, Boa
         // Get the piece at the current Pos
         Piece *pieceAtCurPos = GetPieceAtPos(curPos, board);
         // Create the move from the pieceToGetMovesFor to the curPos
-        Move curMove = {pieceToGetMovesFor->pos, curPos, pieceToGetMovesFor, NULL};
+        Move curMove = {pieceToGetMovesFor->pos, curPos, pieceToGetMovesFor, NULL, Default};
         // Check wether there actually is a piece at the currentPosition
         if (pieceAtCurPos != NULL)
         {
@@ -415,11 +415,11 @@ MoveDataLinkedList *checkMoveOffsetsForValidity(Pos possibleOffsetPos[], int pos
         Pos curPos = {pieceToCheckMovesFor->pos.X + possibleOffsetPos[i].X, pieceToCheckMovesFor->pos.Y + possibleOffsetPos[i].Y};
         
         // If this move would actually lead of board continue with the next one
-        if (curPos.X < 0 || curPos.X > 7 || curPos.Y < 0 || curPos.Y > 7) continue;
+        if (IsPosOnBoard(curPos)) continue;
 
 
         // Create the move from the pieceToCheckMovesFor to the curPos
-        Move curMove = {pieceToCheckMovesFor->pos, curPos, pieceToCheckMovesFor, NULL};
+        Move curMove = {pieceToCheckMovesFor->pos, curPos, pieceToCheckMovesFor, NULL, Default};
         
         // Get the piece at the current Pos
         Piece *pieceAtCurPos = GetPieceAtPos(curPos, board);
@@ -456,6 +456,52 @@ MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board)
     switch (pieceToGetMovesFor->pieceType)
     {
         case Pawn:
+
+            // Get the Direction on y this pawn can move this is either up or down depending on color (notice that yes -1 does actually represent up)
+            int yDir = pieceToGetMovesFor->pieceColor == White ? -1 : 1;
+
+
+            /* Capture on upper left */
+
+            // Destination position for the capture move to the upper left from the pawn
+            Pos captureOnLeftPos = {pieceToGetMovesFor->pos.X - 1, pieceToGetMovesFor->pos.Y + yDir};
+
+            // Check wether the captureOnLeftPos actually is on board, else this capture ain't valid so we just go on
+            if (IsPosOnBoard(captureOnLeftPos))
+            {
+                // Get the piece at the captureOnLeftPos (this will be NULL if there ain't a piece there)
+                Piece *pieceAtUpperLeft = GetPieceAtPos(captureOnLeftPos, board);
+                // Check wether there actually is a piece at the captureOnLeftPos and if so check wether it has a different color then the pawn, if so we can capture it, so add this move
+                if (pieceAtUpperLeft != NULL && pieceAtUpperLeft->pieceColor != pieceToGetMovesFor->pieceColor)
+                {
+
+                    addMoveToMoveDataLinkedList(
+                        (Move){pieceToGetMovesFor->pos, captureOnLeftPos, pieceToGetMovesFor, pieceAtUpperLeft, Default},
+                        moveList);
+                }
+            }
+
+
+            /* Capture on upper right */
+
+            // Destination position for the capture move to the upper right from the pawn
+            Pos captureOnRightPos = {pieceToGetMovesFor->pos.X + 1, pieceToGetMovesFor->pos.Y + yDir};
+
+            // Check wether the captureOnRightPos actually is on board, else this capture ain't valid so we just go on
+            if (IsPosOnBoard(captureOnRightPos))
+            {
+                // Get the piece at the captureOnRightPos (this will be NULL if there ain't a piece there)
+                Piece *pieceAtUpperRight = GetPieceAtPos(captureOnRightPos, board);
+                // Check wether there actually is a piece at the captureOnRightPos and if so check wether it has a different color then the pawn, if so we can capture it, so add this move
+                if (pieceAtUpperRight != NULL && pieceAtUpperRight->pieceColor != pieceToGetMovesFor->pieceColor)
+                {
+
+                    addMoveToMoveDataLinkedList(
+                        (Move){pieceToGetMovesFor->pos, captureOnRightPos, pieceToGetMovesFor, pieceAtUpperRight, Default},
+                        moveList);
+                }
+            }
+
             break;
 
         case Knight:
