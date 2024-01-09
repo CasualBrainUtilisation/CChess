@@ -330,13 +330,8 @@ void addMoveToMoveDataLinkedList(Move moveToAdd, MoveDataLinkedList *moveDataLin
 // The list should then be referenced by the headList
 void mergeMoveDataLinkedList(MoveDataLinkedList *headList, MoveDataLinkedList *finalList)
 {
-    // In case the finalList is empty there is nothing to merge here
-    if (finalList == NULL)
-    {
-        return;
-    }
-    // In case the headList is empty, make it point to the finalList
-    else if (headList->Head == NULL)
+    // In case the headList is empty, make it point to the finalList Head
+    if (headList->Head == NULL)
     {
         headList->Head = finalList->Head;
         headList->LastElement = finalList->LastElement;
