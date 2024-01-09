@@ -403,6 +403,49 @@ MoveDataLinkedList *getLineMoves(MoveDir moveDir, Piece *pieceToGetMovesFor, Boa
     return moveList;
 }
 
+// Checks moves with given offsets from pos of given piece on given board for validity and only returns those moves that are valid
+MoveDataLinkedList *checkMoveOffsetsForValidity(Pos possibleOffsetPos[], int possibleOffsetPosCount, Piece *pieceToCheckMovesFor, Board *board)
+{
+    // All the valid moves will be added to this list (and then returned)
+    MoveDataLinkedList *moveList = initMoveDataLinkedList();
+
+    for (int i = 0; i < possibleOffsetPosCount; i++ )
+    {
+        // Get the pos at the current index in the loop
+        Pos curPos = {pieceToCheckMovesFor->pos.X + possibleOffsetPos[i].X, pieceToCheckMovesFor->pos.Y + possibleOffsetPos[i].Y};
+        
+        // If this move would actually lead of board continue with the next one
+        if (curPos.X < 0 || curPos.X > 7 || curPos.Y < 0 || curPos.Y > 7) continue;
+
+
+        // Create the move from the pieceToCheckMovesFor to the curPos
+        Move curMove = {pieceToCheckMovesFor->pos, curPos, pieceToCheckMovesFor, NULL};
+        
+        // Get the piece at the current Pos
+        Piece *pieceAtCurPos = GetPieceAtPos(curPos, board);
+        // Check wether there actually is a piece at the currentPosition
+        if (pieceAtCurPos != NULL)
+        {
+            // Check wether the pieceAtCurPos has a different color then the pieceToCheckMovesFor, if so, add this move and set the pieceToCapture to the pieceAtCurPos, as it can be captured
+            if (pieceAtCurPos->pieceColor != pieceToCheckMovesFor->pieceColor)
+            {
+                curMove.PieceToCapture = pieceAtCurPos;
+                addMoveToMoveDataLinkedList(curMove, moveList);
+            }
+            else // If the piece has the same color as the pieceToCheckMovesFor this move is invalid, so continue with the next one
+            {
+                continue;
+            }
+        }
+
+        // Add the curMove to the moveList
+        addMoveToMoveDataLinkedList(curMove, moveList);
+    }
+
+    // Return the moves we got througout this function
+    return moveList;
+}
+
 // Gives back all the possible moves for given piece
 MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board)
 {
@@ -416,6 +459,9 @@ MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board)
             break;
 
         case Knight:
+
+
+
             break;
 
         case Bishop:
@@ -462,6 +508,13 @@ MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board)
             break;
         
         case King:
+
+            // The King can offset into every direction, here we get these possible offsets into a simple list
+            MoveDir KingMoveOffsets[] = {{1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}, {0,-1}, {1,-1}};
+
+            // Now we check this offsets for representing valid moves, as checkMoveOffsetsForValidity() returns these valid moves, we simpoly merge them to the moveList
+            mergeMoveDataLinkedList(moveList, checkMoveOffsetsForValidity(KingMoveOffsets, sizeof(KingMoveOffsets)/(sizeof(KingMoveOffsets[0])), pieceToGetMovesFor, board));
+
             break;
     }
 
