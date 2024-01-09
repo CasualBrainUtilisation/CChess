@@ -455,7 +455,7 @@ MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board)
     // Obviously depending on type, move generation will work completly different for different pieces
     switch (pieceToGetMovesFor->pieceType)
     {
-        case Pawn:
+        case Pawn: //TODO: add enPassant (which you defintely should google if you don't know what that is)
 
             // Get the Direction on y this pawn can move to, this is either up or down depending on color (notice that yes -1 does actually represent up)
             int yDir = pieceToGetMovesFor->pieceColor == White ? -1 : 1;
