@@ -386,7 +386,8 @@ MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, ChessGame *ch
             // Get the castlingRights for the color of the PieceToGetMovesFor
             CastlingRights castlingRightsForPieceToGetMovesFor = pieceToGetMovesFor->pieceColor == White ? chessGame->gameCastlingRights.whiteCastlingRights : chessGame->gameCastlingRights.blackCastlingRights;
 
-            // Check wether the piece is able to perform a queenSide castle
+            /* QueenSide */
+            // Check wether the piece still has the rights to perform a QueenSide castle
             if (castlingRightsForPieceToGetMovesFor == QueenSide || castlingRightsForPieceToGetMovesFor == BothSides)
             {
                 // Now check wether the three squares left to the king are emtpy, if so, we can perform a QueenSideCastle, so add given move (which is 2 to the left; PerformMove() will have to worry about getting corresponding rook)
@@ -396,6 +397,20 @@ MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, ChessGame *ch
                 {
                     addMoveToMoveDataLinkedList(
                         (Move){pieceToGetMovesFor->pos, (Pos){pieceToGetMovesFor->pos.X - 2, pieceToGetMovesFor->pos.Y}, pieceToGetMovesFor, NULL, CastleLong}, //For the PerformMove() function to know what to with this move (aka move the rook too not just the king) we need the additional information of this move beeing a CastleLong
+                        moveList);
+                }
+            }
+
+            /* KingSide */
+            // Check wether the piece still has the rights to perform a kingside castle
+            if (castlingRightsForPieceToGetMovesFor == KingSide || castlingRightsForPieceToGetMovesFor == BothSides)
+            {
+                // Now check wether the two squares right to the king are emtpy, if so, we can perform a KingSideCastle, so add given move (which is 2 to the right; PerformMove() will have to worry about getting corresponding rook)
+                if (GetPieceAtPos((Pos){pieceToGetMovesFor->pos.X + 1, pieceToGetMovesFor->pos.Y}, chessGame->board) == NULL &&
+                    GetPieceAtPos((Pos){pieceToGetMovesFor->pos.X + 2, pieceToGetMovesFor->pos.Y}, chessGame->board) == NULL)
+                {
+                    addMoveToMoveDataLinkedList(
+                        (Move){pieceToGetMovesFor->pos, (Pos){pieceToGetMovesFor->pos.X + 2, pieceToGetMovesFor->pos.Y}, pieceToGetMovesFor, NULL, CastleShort}, //For the PerformMove() function to know what to with this move (aka move the rook too not just the king) we need the additional information of this move beeing a CastleShort
                         moveList);
                 }
             }
