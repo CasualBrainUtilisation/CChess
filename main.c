@@ -7,20 +7,20 @@
 
 int main()
 {
-    ChessGame *chessGame = GetGameFromFEN("rnbqkr1r/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    ChessGame *chessGame = GetGameFromFEN("r3krrr/pppppppp/8/8/8/8/PPPPPPPP/RRRRKBNR w KQkq - 0 1");
     if(chessGame == NULL) printf("now i have to cry \n");
 
     PrintBoard(chessGame->board);
     printf("\n");
 
-    Pos pos = {4, 0};
+    Pos pos = {4, 7};
     Piece *piece = GetPieceAtPos(pos, chessGame->board);
 
     MoveDataLinkedList *moves = GetAllMovesForPiece(piece, chessGame);
 
     if (moves == NULL) printf("There ain't moves lol");
 
-    PerformMove(moves->Head->Next->data, chessGame->board);
+    PerformMove(&moves->Head->Next->data, chessGame);
 
     PrintBoard(chessGame->board);
 

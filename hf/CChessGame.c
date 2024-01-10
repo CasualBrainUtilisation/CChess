@@ -65,8 +65,8 @@ ChessGame *InitChessGame()
 // Simple function to add given castlingRightToAdd to given castlingRightToAddTo enum, returns 1 on given castling right beeing invalid to add, 0 on sucess
 int AddCastlingRight(CastlingRights castlingRightToAdd, CastlingRights *castlingRightToAddTo)
 {
-    // U can't add the castlingRight None, neither can you add one over 3 (which is the limit of the castlingRight enum), so return 1 if that is tried here
-    if (castlingRightToAdd == None || castlingRightToAdd > 3) return 1;
+    // U can't add the castlingRight None, neither can you add one over 3 (which is the limit of the castlingRight enum) or under 0, so return 1 if that is tried here
+    if (castlingRightToAdd == None || castlingRightToAdd > 3 || castlingRightToAdd < 0) return 1;
     // Return 1 if the castlingRight already has been added
     if (castlingRightToAdd == *castlingRightToAddTo || *castlingRightToAddTo == BothSides) return 1;
 

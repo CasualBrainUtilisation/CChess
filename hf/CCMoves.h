@@ -57,7 +57,7 @@ typedef struct MoveDataLinkedList
 void DeleteMoveDataLinkedList(MoveDataLinkedList **moveDataLinkedListToDelete);
 
 // Performs given move on given board
-void PerformMove(Move moveToPerform, Board *board);
+void PerformMove(Move *moveToPerform, ChessGame *chessGame);
 
 // Gives back all the possible moves for given piece on given board
 MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, ChessGame *chessGame);

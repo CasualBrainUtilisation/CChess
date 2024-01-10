@@ -35,12 +35,12 @@ typedef struct Vector2 MoveDir;
 // Following functions will all be related to moves
 
 // Performs given move on given board
-void PerformMove(Move *moveToPerform, Board *board)
+void PerformMove(Move *moveToPerform, ChessGame *chessGame)
 {
     // First remove the piece to capture
     if (moveToPerform->PieceToCapture != NULL)
     {
-        RemovePiece(moveToPerform->PieceToCapture, board);
+        RemovePiece(moveToPerform->PieceToCapture, chessGame->board);
     }
 
     // Store the oldPos of the piece, so we can change its pos in the piecesHashTable later on
@@ -48,7 +48,29 @@ void PerformMove(Move *moveToPerform, Board *board)
     // Move pieceToMove to target pos, 
     moveToPerform->PieceToMove->pos = moveToPerform->moveTargetPos;
     // Now update its pos in the piecesHashTable
-    UpdatePiecePosOnBoard(moveToPerform->PieceToMove, oldPos, board);
+    UpdatePiecePosOnBoard(moveToPerform->PieceToMove, oldPos, chessGame->board);
+
+    // Depending on the move type, we might have to take some additional steps other then just performing given move info
+    switch (moveToPerform->moveType) //TODO: make external func in board to change the pos of pieces on board (prob not to be done but yeah)
+    {
+        // In case it's a castlong move, we'll have to also move the rook on the left side 3 squares to the right
+        case CastleLong:
+        
+        // Get the rook on the left corner
+        Piece *rookToMove = GetPieceAtPos((Pos){0, moveToPerform->PieceToMove->pos.Y}, chessGame->board);
+
+        // Change its position
+        rookToMove->pos = (Pos){3, moveToPerform->PieceToMove->pos.Y};
+
+        // Now update its position on board
+        UpdatePiecePosOnBoard(rookToMove, (Pos){0, moveToPerform->PieceToMove->pos.Y}, chessGame->board);
+
+        // Finally remove the CastleLong castling right from the color of the piece we just moved
+        CastlingRights castlingRightsOfCurrentColor = moveToPerform->PieceToMove->pieceColor == White ? chessGame->gameCastlingRights.whiteCastlingRights : chessGame->gameCastlingRights.blackCastlingRights;
+        castlingRightsOfCurrentColor -= QueenSide;
+
+        break;
+    }
 }
 
 
