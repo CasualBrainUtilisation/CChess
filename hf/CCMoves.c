@@ -51,23 +51,41 @@ void PerformMove(Move *moveToPerform, ChessGame *chessGame)
     UpdatePiecePosOnBoard(moveToPerform->PieceToMove, oldPos, chessGame->board);
 
     // Depending on the move type, we might have to take some additional steps other then just performing given move info
-    switch (moveToPerform->moveType) //TODO: make external func in board to change the pos of pieces on board (prob not to be done but yeah)
+    switch (moveToPerform->moveType) //TODO: Make Castling not work even if rights are present when it just ain't possible (prob remove this in gameLoading though)
     {
-        // In case it's a castlong move, we'll have to also move the rook on the left side 3 squares to the right
+        // In case it's a castlong move, we'll have to also move the rook on the left side 3 squares to the right and we need to remove se CastlingRights
         case CastleLong:
         
         // Get the rook on the left corner
-        Piece *rookToMove = GetPieceAtPos((Pos){0, moveToPerform->PieceToMove->pos.Y}, chessGame->board);
+        Piece *castleLongRookToMove = GetPieceAtPos((Pos){0, moveToPerform->PieceToMove->pos.Y}, chessGame->board);
 
         // Change its position
-        rookToMove->pos = (Pos){3, moveToPerform->PieceToMove->pos.Y};
+        castleLongRookToMove->pos = (Pos){3, moveToPerform->PieceToMove->pos.Y};
 
         // Now update its position on board
-        UpdatePiecePosOnBoard(rookToMove, (Pos){0, moveToPerform->PieceToMove->pos.Y}, chessGame->board);
+        UpdatePiecePosOnBoard(castleLongRookToMove, (Pos){0, moveToPerform->PieceToMove->pos.Y}, chessGame->board);
 
-        // Finally remove the CastleLong castling right from the color of the piece we just moved
-        CastlingRights castlingRightsOfCurrentColor = moveToPerform->PieceToMove->pieceColor == White ? chessGame->gameCastlingRights.whiteCastlingRights : chessGame->gameCastlingRights.blackCastlingRights;
-        castlingRightsOfCurrentColor -= QueenSide;
+        // Finally remove the CastleLong castling rights from the color of the piece we just moved (aka set them to NONE)
+        if (moveToPerform->PieceToMove->pieceColor == White) chessGame->gameCastlingRights.whiteCastlingRights = None;
+        else chessGame->gameCastlingRights.blackCastlingRights = None;
+
+        break;
+
+        // In case it's a castleShort move, we'll have to also move the rook on the right side 2 squares to the left and we need to remove se CastlingRights
+        case CastleShort:
+        
+        // Get the rook on the right corner
+        Piece *rookToMove = GetPieceAtPos((Pos){7, moveToPerform->PieceToMove->pos.Y}, chessGame->board);
+
+        // Change its position
+        rookToMove->pos = (Pos){5, moveToPerform->PieceToMove->pos.Y};
+
+        // Now update its position on board
+        UpdatePiecePosOnBoard(rookToMove, (Pos){7, moveToPerform->PieceToMove->pos.Y}, chessGame->board);
+
+        // Finally remove the CastleLong castling rights from the color of the piece we just moved (aka set them to NONE)
+        if (moveToPerform->PieceToMove->pieceColor == White) chessGame->gameCastlingRights.whiteCastlingRights = None;
+        else chessGame->gameCastlingRights.blackCastlingRights = None;
 
         break;
     }
