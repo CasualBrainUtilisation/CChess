@@ -3,7 +3,6 @@
 
 #include <stdlib.h>
 #include "CCPieces.h"
-#include "CCMoves.h"
 
 /* Contains the ChessBoard and all the functions that impact or require the ChessBoard struct */
 
@@ -31,6 +30,10 @@ Board *InitBoard();
 // If there is no piece at the given pos, returned piece will be NULL
 Piece *GetPieceAtPos(Pos pos, Board *board);
 
+// Updates the key in the hashTable of given board for given piece
+// This should be called after changing the position of a piece
+void UpdatePiecePosOnBoard(Piece *pieceToUpdate, Pos oldPos, Board *board);
+
 /* PieceData linked list functions */
 // Adds a piece with given properties to the given board, added piece will be returned as pointer
 Piece *AddPiece(PieceType pieceType, PieceColor pieceColor, Pos pos, Board *board);
@@ -49,36 +52,5 @@ void D_PrintPieceDataList(Board *board);
 
 // Prints all information about given piece
 void D_PrintPiece(Piece *piece, char name[]);
-
-/* Moves */
-// Following functions will all be related to moves
-
-/* Move Data Linked List */
-// For storing moves, we'll need a linked list (as we are gonna add to our list constantly in the getMoves() functions)
-// The elements in the linked list
-typedef struct MoveData
-{
-    Move data; // Data stored in an element
-    struct MoveData *Next; // The next element in the linked list
-} MoveData;
-
-//Kepps track of created move data linked list
-typedef struct MoveDataLinkedList
-{
-    MoveData *Head; // The head of the MoveData linked list (aka first element)
-    MoveData *LastElement; // The last element of the moveData linked list, which is kept track of to easily add to the list
-
-    size_t listSize; // Keeps track of the size of the list
-} MoveDataLinkedList;
-
-// Deletes given moveDataLinkedList data alongside freeing everything in there that we mallocated
-// Must be called to delete any MoveDataLinkedList (aslong as you actually wanna avoid memory leaks that is)
-void DeleteMoveDataLinkedList(MoveDataLinkedList **moveDataLinkedListToDelete);
-
-// Performs given move on given board
-void PerformMove(Move moveToPerform, Board *board);
-
-// Gives back all the possible moves for given piece
-MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, Board *board);
 
 #endif

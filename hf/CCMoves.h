@@ -2,6 +2,7 @@
 #define CCMoves
 
 #include "CCPieces.h" // Piece and Pos are required
+#include "CChessGame.h"
 
 /* Everything to work with chess moves */
 
@@ -29,5 +30,36 @@ typedef struct Move
 
 // This struct is used to represent the direction of a move
 typedef struct Vector2 MoveDir;
+
+/* Move Functions */
+// Following functions will all be related to moves
+
+/* Move Data Linked List */
+// For storing moves, we'll need a linked list (as we are gonna add to our list constantly in the getMoves() functions)
+// The elements in the linked list
+typedef struct MoveData
+{
+    Move data; // Data stored in an element
+    struct MoveData *Next; // The next element in the linked list
+} MoveData;
+
+//Kepps track of created move data linked list
+typedef struct MoveDataLinkedList
+{
+    MoveData *Head; // The head of the MoveData linked list (aka first element)
+    MoveData *LastElement; // The last element of the moveData linked list, which is kept track of to easily add to the list
+
+    size_t listSize; // Keeps track of the size of the list
+} MoveDataLinkedList;
+
+// Deletes given moveDataLinkedList data alongside freeing everything in there that we mallocated
+// Must be called to delete any MoveDataLinkedList (aslong as you actually wanna avoid memory leaks that is)
+void DeleteMoveDataLinkedList(MoveDataLinkedList **moveDataLinkedListToDelete);
+
+// Performs given move on given board
+void PerformMove(Move moveToPerform, Board *board);
+
+// Gives back all the possible moves for given piece on given board
+MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, ChessGame *chessGame);
 
 #endif
