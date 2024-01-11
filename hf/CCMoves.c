@@ -9,7 +9,6 @@
 typedef enum MoveType
 {
     Default, // A default chess move
-    EnPassant, // Google En Passant //TODO: this prob is actually unecessary (not sure rn though we'll C)
     CastleLong, // A long castle move
     CastleShort, // A short castle move
     DoublePawnMove, // When a pawn moves 2 squares off its starting square, this is used to determinate possible en Passant moves in the next move, when performing one
@@ -49,6 +48,9 @@ void PerformMove(Move *moveToPerform, ChessGame *chessGame)
     moveToPerform->PieceToMove->pos = moveToPerform->moveTargetPos;
     // Now update its pos in the piecesHashTable
     UpdatePiecePosOnBoard(moveToPerform->PieceToMove, oldPos, chessGame->board);
+
+    // Also set the NewEnPassantDestinationPos to NULL, it will be changed later, in case we are performing a pawnDoubleMove (aka we have to set it to smth)
+    SetNewEnPassantDestinationPos(NULL, chessGame);
 
     // Depending on the move type, we might have to take some additional steps other then just performing given move info
     switch (moveToPerform->moveType) //TODO: Make Castling not work even if rights are present when it just ain't possible (prob remove this in gameLoading though)
@@ -320,6 +322,13 @@ MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, ChessGame *ch
                         (Move){pieceToGetMovesFor->pos, captureOnLeftPos, pieceToGetMovesFor, pieceAtUpperLeft, Default},
                         moveList);
                 }
+                // Else if the captureOnLeftPos has the same x and y values as the possibleEnPassantDestinationPos, meaning you can perform an enPassant here, so add this move
+                else if (captureOnLeftPos.X == chessGame->possibleEnPassantDestinationPos->X && captureOnLeftPos.Y == chessGame->possibleEnPassantDestinationPos->Y)
+                {
+                    addMoveToMoveDataLinkedList(
+                        (Move){pieceToGetMovesFor->pos, captureOnLeftPos, pieceToGetMovesFor, GetPieceAtPos((Pos){pieceToGetMovesFor->pos.X - 1, pieceToGetMovesFor->pos.Y}, chessGame->board), Default}, // In this case we'll have to add the pawn at the left side of this pawn as the PieceToCapture (as this is what en passant does)
+                        moveList);
+                }
             }
 
 
@@ -339,6 +348,13 @@ MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, ChessGame *ch
 
                     addMoveToMoveDataLinkedList(
                         (Move){pieceToGetMovesFor->pos, captureOnRightPos, pieceToGetMovesFor, pieceAtUpperRight, Default},
+                        moveList);
+                }
+                // Else if the captureOnRightPos has the same x and y values as the possibleEnPassantDestinationPos, you can perform an enPassant here, so add this move
+                else if (captureOnRightPos.X == chessGame->possibleEnPassantDestinationPos->X && captureOnRightPos.Y == chessGame->possibleEnPassantDestinationPos->Y)
+                {
+                    addMoveToMoveDataLinkedList(
+                        (Move){pieceToGetMovesFor->pos, captureOnLeftPos, pieceToGetMovesFor, GetPieceAtPos((Pos){pieceToGetMovesFor->pos.X + 1, pieceToGetMovesFor->pos.Y}, chessGame->board), Default}, // In this case we'll have to add the pawn at the right side of this pawn as the PieceToCapture (as this is what en passant does)
                         moveList);
                 }
             }

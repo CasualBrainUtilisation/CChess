@@ -403,4 +403,10 @@ void ConvertGameToFEN(char FENToReturn[128], ChessGame *chessGameToConvert)
         FENToReturn[curIndex] = nextMoveNumberToAddAsString[i];
         curIndex++;
     }
+
+
+
+    /* Null Terminator */
+    // Now in the end of the FENToReturn just add a nullTerminator to mark the end of the FEN-string
+    FENToReturn[curIndex] = '\0';
 }

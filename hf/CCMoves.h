@@ -10,7 +10,6 @@
 typedef enum MoveType
 {
     Default, // A default chess move
-    EnPassant, // Google En Passant //TODO: this prob is actually unecessary (not sure rn though we'll C)
     CastleLong, // A long castle move
     CastleShort, // A short castle move
     DoublePawnMove, // When a pawn moves 2 squares off its starting square, this is used to determinate possible en Passant moves in the next move, when performing one
