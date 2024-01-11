@@ -7,8 +7,8 @@
 // This can be imagined like a cordinate system on the board from 0-7 on x and y, notice though that (0|0) is placed on the top left of the board, rather then the bottom left
 typedef struct Vector2
 {
-    int X; // The X represents the files of the ChessBoard (The numbers 0-7)
-    int Y; // The Y represents the ranks of the ChessBoard (The letters a - h (with 0-7))
+    int X; // The X represents the files of the ChessBoard (The letters a - h (with 0-7))
+    int Y; // The Y represents the ranks of the ChessBoard (The numbers 1-8 (with 0-7))
 } Pos;
 
 // Checks wether given position is on the valid range of a chessBoard (meaning both x and y would have to be in a range from 0-7)

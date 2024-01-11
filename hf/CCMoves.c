@@ -53,7 +53,7 @@ void PerformMove(Move *moveToPerform, ChessGame *chessGame)
     // Depending on the move type, we might have to take some additional steps other then just performing given move info
     switch (moveToPerform->moveType) //TODO: Make Castling not work even if rights are present when it just ain't possible (prob remove this in gameLoading though)
     {
-        // In case it's a castlong move, we'll have to also move the rook on the left side 3 squares to the right and we need to remove se CastlingRights
+        // In case it's a castleLong move, we'll have to also move the rook on the left side 3 squares to the right and we need to remove se CastlingRights
         case CastleLong:
         
         // Get the rook on the left corner
@@ -86,6 +86,22 @@ void PerformMove(Move *moveToPerform, ChessGame *chessGame)
         // Finally remove the CastleLong castling rights from the color of the piece we just moved (aka set them to NONE)
         if (moveToPerform->PieceToMove->pieceColor == White) chessGame->gameCastlingRights.whiteCastlingRights = None;
         else chessGame->gameCastlingRights.blackCastlingRights = None;
+
+        break;
+
+        // In case it's a doublePawnMove, that makes an en passant possible next move, so set that possible en passant, which as the pawn already moved, would be 1 square down (for white) or 1 square up (for black)
+        case DoublePawnMove:
+
+        // The newEnPassantDestinationPos for the next move
+        Pos *newEnPassantDestinationPos = malloc(sizeof(Pos));
+        // Set the X which obviously is equal to the xPos of the pieceToMove
+        newEnPassantDestinationPos->X = moveToPerform->PieceToMove->pos.X;
+        // The Y pos though depends on the pieceColor (either gonna be 5 (white) or 2 (black))
+        if (moveToPerform->PieceToMove->pieceColor == White) newEnPassantDestinationPos->Y = 5;
+        else newEnPassantDestinationPos->Y = 2;
+
+        // Now Set the NewEnPassantDestinationPos to the one defined above
+        SetNewEnPassantDestinationPos(newEnPassantDestinationPos, chessGame);
 
         break;
     }
