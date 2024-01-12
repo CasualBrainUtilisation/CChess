@@ -58,10 +58,13 @@ Piece *GetPieceAtPos(Pos pos, Board *board)
 // This should be called after changing the position of a piece
 void UpdatePiecePosOnBoard(Piece *pieceToUpdate, Pos oldPos, Board *board)
 {
+    printf("Setting piece to NULL at %d|%d \n", oldPos.X, oldPos.Y);
     // Remove piece from old key value
     board->piecesHashTable[getHash(oldPos)] = NULL;
+
     // Check wether we're overwriting a piece, if so prompt that
     if (board->piecesHashTable[getHash(pieceToUpdate->pos)] != NULL) printf("Overwriting old piece at (%d|%d) on the piecesHashTable, you are moving a piece on a square that already contains one \n", pieceToUpdate->pos.X, pieceToUpdate->pos.Y);
+
     // Add piece to the new key value
     board->piecesHashTable[getHash(pieceToUpdate->pos)] = pieceToUpdate;
 }

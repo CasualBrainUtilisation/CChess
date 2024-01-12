@@ -364,7 +364,7 @@ MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, ChessGame *ch
 
             // Get the pos in the yDir of the pawn, this would be the destination pos of a normal single PawnMove
             Pos singlePawnMoveDestinationPos = {pieceToGetMovesFor->pos.X, pieceToGetMovesFor->pos.Y + yDir};
-
+                        
             // Check wether there is not a piece at the singlePawnMoveDestinationPos, if so this move is valid, so add it and check wether a doublePawnMove may be performable
             if (GetPieceAtPos(singlePawnMoveDestinationPos, chessGame->board) == NULL)
             {
@@ -373,7 +373,7 @@ MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, ChessGame *ch
                         moveList);
 
                 // Check wether the pawn still is on its starting square, if so, given a singlePawnMove move would be possible, maybe a doublePawnMove also could be
-                if (pieceToGetMovesFor->pos.Y = pieceToGetMovesFor->pieceColor == White ? 6 : 1)
+                if (pieceToGetMovesFor->pos.Y == pieceToGetMovesFor->pieceColor == White ? 6 : 1)
                 {
                     // So get the pos 2 two ahead of the pawn (on the yDir), which would be the destanation of a doublePawnMove
                     Pos doublePawnMoveDestinationPos = {pieceToGetMovesFor->pos.X, pieceToGetMovesFor->pos.Y + yDir * 2};
@@ -444,7 +444,7 @@ MoveDataLinkedList *GetAllMovesForPiece(Piece *pieceToGetMovesFor, ChessGame *ch
 
             break;
         
-        case King: //TODO: castling
+        case King:
 
             // The King can offset into every direction, here we get these possible offsets into a simple list
             MoveDir KingMoveOffsets[] = {{1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}, {0,-1}, {1,-1}};
